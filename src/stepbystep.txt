@@ -1,0 +1,2860 @@
+58.1 - Criar o projeto com o comando ng new nomedoprojeto sem recusar nada adiciona routing e o arquivo .css
+59.2 - Criar a pasta  navegação e as subpastas home,menu,footer,not-found
+59.3 - Criar arquivos . html e ts em cada pasta da navegação e na raiz da pasta nevegacao criar o arquivo navegacao.module.ts 
+59.4 - Incluir dados de navegação nos arquivos .ts
+    ex: import { Component } from "@angular/core";
+
+
+    @Component({
+        selector: 'app-footer',
+        templateUrl: './footer.component.html'
+    })
+    export class FooterComponent{}
+4.1 - app-footer é o nome que representa o arquivo html no arquivo app.component.html que organiza o design pattern 
+4.2 - templateUrl é o caminho da pasta do arquivo
+59.5 - Abrir o arquivo navegacao.module.ts dentro da pasta navegacao e incluir as classes criadas em cada arquivo .ts que agrupa os componentes
+        ex:
+        import { NgModule } from "@angular/core";
+        import { CommonModule } from "@angular/common";
+        import { RouterModule } from "@angular/router";
+        import { MenuComponent } from "./menu/menu.component";
+        import { HomeComponent } from "./home/home.component";
+        import { FooterComponent } from "./footer/footer.component";
+        import { NotFoundComponent } from "./not-found/not-found.component";
+
+        @NgModule({
+            declarations: [
+                MenuComponent,
+                HomeComponent,
+                FooterComponent,
+                NotFoundComponent
+            ],
+            imports:[   
+                CommonModule,
+                RouterModule
+            ],
+            exports:[
+                MenuComponent,
+                HomeComponent,
+                FooterComponent,
+                NotFoundComponent
+            ]
+        })
+        export class NavegacaoModule{}
+
+59.6 - Incluir a classe NavegacaoModule no arquivo app.modules.ts que é o modulo central da aplicação
+ex:
+    
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    NavegacaoModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+59.7 - Adicionar a estrutura basica em cada arquivo componente .html da navegacao ex:
+    @component({
+        selector: 'app-home',
+        templateUrl: './home.component.html'
+    })
+
+59.8 - Deletar o conteudo padrao criado na instalação do arquivo index.html e incluir dentro do body a tag:
+ex: 
+    <body>
+        <app-root></app-root>
+    </body>
+
+59.8 - Apagar o conteudo do arquivo  app.component.html criado na instalação do projeto e incluir as tags que organizam os componentes de navegação
+    
+    <app-menu></app-menu>
+    <router-outlet></router-outlet> -- componente que está sendo renderizado na pagina index.html
+    <app-footer></app-footer>
+
+59.9 - Atenção ao arquivo app.routing.module.ts, na instalação é perguntando se deseja incluir a rota, se aceitar vai criar esse arquivo.
+    senão aceitar criar e adicionar as linhas que chama a pagina principal:
+
+        const routes: Routes = [
+                                { path: '', redirectTo: '/home', pathMatch: 'full' },
+                                { path: 'home', component: HomeComponent },
+                                ];
+
+                                @NgModule({
+                                imports: [RouterModule.forRoot(routes)],
+                                exports: [RouterModule]
+                                })
+                                export class AppRoutingModule { }
+
+59.10 - Incluir no arquivo style.css os ajuste gerais
+
+60.9 - Instalação bootstrap
+    9.1 - Navegar ate a url https://ng-bootstrap.github.io/#/getting-started 
+    9.2 - Copiar o comando 'ng add @ng-bootstrap/ng-bootstrap'
+    9.3 - Importa o no app.module e navegacao.module.ts  import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+    9.4 - Incluir no imports senão existir 
+        imports: [
+                    BrowserModule,
+                    NavegacaoModule,
+                    AppRoutingModule,
+                    NgbModule
+    9.5 - Adicionar o comando do bootstrap [ngbCollapse]="isCollapsed"> a linha 8 do componente menu.component.html
+    9.6 - Adicionar as linhas 
+            export class MenuComponent{
+            public isCollapsed: boolean;
+
+            constructor(){
+                this.isCollapsed =  true;
+            }
+        } na classe menu.component.ts
+    9.7 - obs até antes da versao 9 do bootstrap era necessario adiciona ng add @angular/localize
+    9.8 - Resultado ao diminuir a tela o botão menu vai aparecer e ao clicar mostrar os outros links diferente de Meus produtos   
+
+61.10 - Criação Login
+61.10.1  - Criado a pasta  conta no mesmo nivel da navegacao com o comando 'ng g module conta' vai criar a pasta conta com o modulo conta.module.ts já com as definições básica.
+61.10.2  - Adicionado duas funcionalidades cadastro e login com os comandos 'ng g c conta/cadastro' e 'ng g c conta/login' cria o basico automaticamente  e ja cadastra o componente no module conta.module.ts.
+61.10.3  - Foi excluido os arquivos .css e no template cadastro.component.ts e login.component.ts foi excluido a linha do css too.
+61.10.4 -  Criar o componente de roteamento raiz desse modulo, e no principal  , criado a pasta models 'onde vamos descrever nosso modelos' e services 'para incluir os serviços'
+61.10.5 - Criado na pasta conta o arquivo  conta.route.ts e conta.app.component.ts 'que vai ser nosso componente principal que vai fazer a rota' arquivos criados sem o comando, e gerados vazios
+61.10.6 - Digitado os seguintes comando dentro do arquivo conta.app.component.ts:
+
+            @Component({
+            selector:  'conta-app-root',
+            template:  '<router-outlet></router-outlet>'
+        })
+
+        export class ContaAppComponent{ } incluir a referencia import { Component } from "@angular/core";
+
+61.10.7 - No arquivo conta.route descrever as rotas com as linhas:
+         
+        @NgModule({
+            imports:[
+                RouterModule.forChild(contaRouterConfig)
+            ],
+            exports:[RouterModule]
+        })
+        export class ContaRoutingModule {} 
+        
+            e registrar as rotas com a constante:
+            'Aqui esta constante  é uma coleção'
+            const contaRouterConfig: Routes = [
+            {
+                path: '',component: ContaAppComponent,
+                children: [
+                        {path: 'cadastro',component: CadastroComponent},
+                        {path: 'login',component: LoginComponent}
+                ] 
+            }
+        ] obs criar antes da linha do comando  @NgModule
+
+61.10.8 - Registra o ContaRoutingModule no conta.module.ts no imports
+61.10.9 - Vai precisar do roteamento então necessita incluir o RouterModule no imports do arquivo conta.module.ts
+61.10.10 - Vai precisar usar formulario então foi incluido o comando FormsModule e ReactiveFormsModule para escrever formularios mais ricos etc..
+61.10.11 - E para adiantar vamos colocar o que vamos precisar para se comunicar com backend HttpClientModule  no imports conta.module.ts
+61.10.12 - organizar modulos do angular separados dos modulos criados por conta propria na mão sem o comando ng
+61.10.13 - Registra o modulo na navegação que é o arquivo app.routing.module.ts e fazer o esquema de registro dinamico com as linhas 
+            {
+                path: 'conta',
+                'Essa linha importa o modulo no path import('./conta/conta.module')'
+                loadChildren:() => import('./conta/conta.module')
+                'E quando terminar vai chamar o modulo '
+                .then(m => m.ContaModule)
+            } 
+61.10.14 - Incluir os modulo de não encontrado com a rota exclusiva na primeir alinha
+
+            { path: 'nao-encontrado', component: NotFoundComponent},
+            {path:'**',component: NotFoundComponent}
+
+61.10.15 - Faltou registra o  ContaAppComponent no arquivo conta.module.ts isso gera erro na linha 5 template:  '<router-outlet></router-outlet>' do arquivo conta.app.component.ts que foi criado
+61.10.16 - Bildar a aplicação e testar 'ng s'
+61.10.17 - Criar os links no componente menu.component.html colocar '[routerlink] no lugar do href' --> <a class="btn btn-primary" [routerLink] = "['/conta/login']">Entrar</a> na pasta navegação
+61.10.17 - Criar os links no componente menu.component.html <a class="btn btn-success" [routerLink] = "['/conta/cadastro']">Crie sua conta</a> na pasta navegação
+
+62 - Criar os modelos com os campos da api na pasta conta/models foi criado o arquivo usuario.ts é uma interface que representa nosso usuario:
+        export interface Usuario {
+        id: string;
+        email: string;
+        password: string;
+        confirmPassword: string;
+    }
+
+62.1 - Para trabalhar com os dados da models foi criado dentro da pasta conta/services o arquivo conta.service.ts
+        
+    import { HttpClient } from "@angular/common/http";
+    import { Injectable } from "@angular/core";
+    import { Usuario } from "../models/usuario";
+
+    @Injectable()
+    export class ContaService extends BaseService {
+
+        constructor(private http: HttpClient){}
+
+        registraUsuario(usuario: Usuario){
+
+        }
+
+        login(usuario: Usuario){
+
+        }
+    }
+
+62.2 - Criado a pasta utils e incluido a classe generic-form-validation.ts que vai fazer o processamento das mensagens
+        com base numa ValidationMessagens que é uma coleção de mensagen de validação onde ela vai devolver uma coleção de erros
+62.3 - Criar uma estrutura de validação de formulario colocar um injeção de dependencia no arquivo conta/cadsatro/cadastro.component.ts 
+            
+            constructor(private fb: FormBuilder)
+
+62.4 - FormBuilder vai criar a estrutura do FormGroup então será declarado no arquivo conta/cadastro/cadastro.component.ts 
+        antes do constructor:
+
+        cadastroForm!: FormGroup;
+
+         constructor(private fb: FormBuilder)
+
+62.5 - No metodo ngOnInit() estrutura basica o objeto com o que precisar e vai ser transformado em formGroup
+    
+    export class CadastroComponent implements OnInit {
+        ngOnInit(): void {
+            this.cadastroForm = this.fb.group({
+                email: [''],
+                password:[''],
+                confirmPassword: ['']
+            });
+        }   
+    }
+
+62.6 - Vamos validar o formularios a partir do momento que tirar o foco do mouse 
+    e para isso vamos implementar a interface AfterViewInit 
+
+    export class CadastroComponent implements OnInit,AfterViewInit {
+             ngOnInit(): void {
+                 this.cadastroForm = this.fb.group(
+                    email: [''],
+                    password:[''],
+                    confirmPassword: ['']
+                });
+            }
+
+             ngAfterViewInit() {
+
+             }
+          
+            
+    }   
+
+62.7 - E Criar o metodo para adicionar Usuario e monta os campos com nome igual ao da API
+    
+    export class CadastroComponent implements OnInit,AfterViewInit {
+
+        cadastroForm!: FormGroup;
+        usuario!: Usuario; variaveis de referencia, senão criar gera erro
+
+             ngOnInit(): void {
+                 this.cadastroForm = this.fb.group(
+                    email: [''],
+                    password:[''],
+                    confirmPassword: ['']
+                });
+            }
+             ngAfterViewInit() {
+             }
+
+             adicionarConta(){
+                if(this.cadastroForm.dirty && this.cadastroForm.valid){
+                   this.usuario = Object.assign({},this.usuario,this.cadastroForm.value);
+                }
+
+    }
+
+62.8 - Registra o service no arquivo conta.module.ts abaixo do imports com a linha
+
+        providers:[ContaService]
+
+62.9 - No arquivo conta/cadastro/cadastro.component.ts incluir no constructor a linha  private contaService: ContaService:
+
+        constructor(private fb: FormBuilder,
+                private contaService: ContaService) 
+
+62.10 - Chamar o metodo registrar usuario arquivo conta/cadastro/cadastro.component.ts:
+
+            adicionarConta(){
+                            this.cadastroForm.dirty && this.cadastroForm.valid){
+                             this.usuario = Object.assign({},this.usuario,this.cadastroForm.value);  
+
+                                //metodo void até aqui não vai fazer nada
+                                this.contaService.registraUsuario(this.usuario)
+                            }
+                        }
+
+62.11 - Para validar o formulario vamos precisar dos objetos:
+
+    //Incluidos na linha 26 do arquivo conta/cadastro/cadastro.component.ts
+    validationMessages: ValidationMessage
+    genericValidator: GenericValidator;
+    displayMessage: DisplayMessage = {};
+     // Esse metodos esão na implementação do arquivo generic-form-validation.ts na pasta utils
+     
+62.12 - Adicionar na limha 22 do arquivo conta/cadastro/cadastro.component.ts uma coleção de erros que vem do servidor
+
+        errors: any[] = [];
+        //Para mostrar as mensagens de erro na hora de conversar com backend
+
+62.13 -  Proximo passo validar as mensagens incluir no construtor as linhas:
+
+         constructor(private fb: FormBuilder,
+             private contaService: ContaService) {
+
+            this.validationMessages = {
+                           email: {
+                                     require:'Informe o e-mail',
+                                     email: 'Email inválido'
+                                     },
+                                     password: {
+                                     required: 'Informe a senha',
+                                      rangeLength: 'A senha deve possuir entre 6 e 15 caracteres'
+                                     },
+                                     confirmPassword: {
+                                       require: 'Informe a senha novamente',
+                                       rangelenth: 'A senha deve possuir entre 6 e 15 caracteres',
+                                       equalTo: 'As senhas não conferem'
+                                     }
+                                  };
+
+            });
+                        }
+        }
+
+    Obs: rangeLength e equalTo não são providos pelos validadores nativos do angular, para isso tem de instalar outro pacote
+
+62.14 - Incluir a linha email: ['',[Validators.required,Validators.email]] para validar email dentro do OnInit: 
+
+                ngOnInit(): void {
+                             this.cadastroForm = this.fb.group({
+                                email: ['',[Validators.required,Validators.email]],
+                                password: [''],
+                                confirmPassword: [''] 
+                                });
+                            }
+
+62.15 - Para validar senha instalar o pacote com o comando npm i ngx-custom-Validators
+62.16 - Primeiro registrar o pacote CustomFormsModule no modulo no arquivo conta.module.ts dentro do imports
+
+
+            @NgModule({
+                declarations: [
+                    ContaAppComponent,
+                    CadastroComponent,
+                    LoginComponent
+                ],
+                imports: [
+                    CommonModule,
+                    RouterModule,
+                    ContaRoutingModule,
+                    FormsModule,
+                    ReactiveFormsModule,
+                    HttpClientModule,
+                    CustomFormsModule
+                ],
+                providers:[
+                    ContaService
+                ]
+                })
+                export class ContaModule { }
+
+    //Senao achar a referencia o comando é import { CustomFormsModule } from 'ngx-custom-validators' que está na documentação no NPM
+
+62.12 - implementar a validação da senha usando a estrategia como não pode comparar dentro do cadastroForm que password: [''] é igual a  confirmPassword: ['']
+    vamos adicionar a seguintes linhas dentro do metodo ngOnInit(), para depois seguir com a implementação.
+
+     let senha = new FormControl('', [Validators.required,CustomValidators.rangeLength([6, 15])]);
+     let senhaConfirm = new FormControl('', [Validators.required, CustomValidators.rangeLength([6, 15]), CustomValidators.eq
+ 
+62.13 - Atribui dentro cadastroForm
+
+                this.cadastroForm = this.fb.group({
+                    email: ['',[Validators.required,Va
+                    ssword: senha,
+                    nfirmPassword: senhaConfirm 
+                });
+
+            //é uma estrategia muito comum quando tem a necessidade de compara um objeto com outro
+
+62.14 - Adicionar também as validações dentro do ngAfterViewInit e adicionar as dependencias:
+
+            ngAfterViewInit(): void {
+                  let controlBlurs:Observable<any>[] = this.formInputElements
+                    .map((FormControl:ElementRef) => fromEvent(FormControl.nativeElement,'blur'));
+
+                  merge(...controlBlurs).subscribe(() => {
+                    this.displayMessage = this.genericValidator.processarMensagens(this.cadastroForm);
+
+                  });
+
+    import { Observable, fromEvent, merge } from 'rxjs';
+
+    explicação: controlBlurs vai ser uma coleção de Observable que vão ser disparadas conforme os elementos do form
+        formInputElements tiverem o evento blur fromEvent ativado, toda vez que tirar o foco de algum controle do formulario
+        vai disparar a trigger para que essa Observable façao o processamento.
+        Embaixo estou dando um merge de todas as Observable controlBlurs para que faça subscribe. Para cada elementos
+        será processado o formulario de cadastro para saber se as informações estão consistentes, conforme especificado 
+        nas validações e as mensagem configuraedas no validationMessages.
+
+62.14 - Adicionar ViewChildren é um selector que vai pegar todos dados do DOM html,
+        vai pegar os FormControlName e trazer as referencias dos elementos ElementRef atraves do formInputElements que é uma coleção
+        de ElementRef, vou obeservar o DOM atraves do ViewChildren
+
+        @ViewChildren(FormControlName, { read: ElementRef })
+        formInputElements!: ElementRef[];
+
+ 62.15 - Para que o genericValidator funcione temos que criar uma instancia senão vai virar um objeto nulo incluido 
+        a linha  this.genericValidator = new GenericValidator(this.validationMessages); dentro do validationMessages
+        para não gerar um erro ou dar um erro. 
+
+                    this.validationMessages = {
+                               email: {
+                                         require:'Informe o e-mail',
+                                         email: 'Email inválido'
+                                         },
+                                         password: {
+                                         required: 'Informe a senha',
+                                          rangeLength: 'A senha deve possuir entre 6 e 15 caracteres'
+                                         },
+                                         confirmPassword: {
+                                           require: 'Informe a senha novamente',
+                                           rangelenth: 'A senha deve possuir entre 6 e 15 caracteres',
+                                           equalTo: 'As senhas não conferem'
+                                         }
+                                      };
+                                 this.genericValidator = new GenericValidator(this.validationMessages);
+                            }
+                           
+62.16 - Colado o html  comentei o funcionamentod entro do proprio arquivo 
+
+            <div class="container main-container">
+                <h1>Cadastro</h1>
+
+                <form novalidate (ngSubmit)="adicionarConta()" [formGroup]="cadastroForm">
+
+                    <h4>Crie sua conta</h4>
+                    <hr>
+
+                    <div class="alert alert-danger" *ngIf="errors.length > 0">
+                        <h3 id="msgRetorno">Opa! Alguma coisa não deu certo:</h3>
+                        <ul>
+                            <li *ngFor="let error of errors">{{ error }}</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">E-mail</label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="email" type="text" placeholder="E-mail (requerido)" formControlName="email" [ngClass]="{'is-invalid': displayMessage.email }" />
+                            <span class="text-danger" *ngIf="displayMessage.email">
+                                            <p [innerHTML]="displayMessage.email"></p>
+                                        </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Senha</label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="password" type="password" placeholder="Senha (requerido)" formControlName="password" [ngClass]="{'is-invalid': displayMessage.password }" />
+                            <span class="text-danger" *ngIf="displayMessage.password">
+                                            <p [innerHTML]="displayMessage.password"></p>
+                                        </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Confirme a Senha</label>
+                        <div class="col-md-10">
+                            <input class="form-control" id="confirmPassword" type="password" placeholder="Confirme a Senha (requerido)" formControlName="confirmPassword" [ngClass]="{'is-invalid': displayMessage.confirmPassword }" />
+                            <span class="text-danger" *ngIf="displayMessage.confirmPassword">
+                                            <p [innerHTML]="displayMessage.confirmPassword"></p>
+                                        </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4 col-md-offset-2">
+                            <span><button class="btn btn-success" id="Registrar" [disabled]="!cadastroForm.valid" type="submit">Registrar</button></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+                  
+63 - Comunicação com o back-end        
+
+    63.1- O Metodo criado registrarUsuario no arquivo services/conta.service deveria responder ao um Observable tipada de usuario  linha 17 
+        
+        Alterado de registraUsuario(usuario: Usuario)(){} para registraUsuario(usuario: Usuario): Observable<Usuario>(){}
+
+        Vai mostrar erro porque não retornou nada 
+
+        A seguir foi acrescentado as linhas:
+        
+        let response = this.http //let response que vai ser a resposta vai ficar igual a this.http'
+            .post('xxx + 'nova-conta' ,usuario)// vou manda informação nova dado logo é um post, no post preciso passar uma URL, corpo que vai ser convertido em json que é os dados do Usuario
+            e os parametros do header que vai ser enviado no formato de aplicatio/json e tudo mais que é opcional
+            .pipe( // vamo colocar esse post dentro de um pipe para processar tanto o caminho feliz que é o retorno utilizado o map
+                map(result => {}), // esse metodo map precisa mapear o resultado para um formato que eu queira. result => significa que vai para alguma coisa
+                catchError();// Aqui o metodo que vai tratar do erro quando não exite nada entre parentes ele é void, vai passar um metod para fazer alguma coisa dentro do parenteses
+                
+        return response;//Essa é a estrutura basica
+
+    63.2 - Como vamos fazer para pegar a url e setar o header?   
+           Como vou extrair os dados do meu map? 
+           Como vou tratar um erro? 
+            Tudo isso vai acontecer varias vezes tanto no modulo de autenticação como nos outros
+            Criar um classe basica de servicos para automatizar e reaproveitar todas essas informações 
+            63.2.1 - Na pasta raiz app criar outra pasta chamada services onde vão ficar nosso serviço genericos
+            63.2.2 - Dentro dessa pasta criar um novo arquivo chamado base.service.ts que não vai ser um servico do tipo Injectable vai ser uma classe abstrata 
+            63.2.3 - Criar um classe abstrata onde nela vou implemtar tudo aquilo que vai ser reutilizavel para os outros serviços
+            63.2.4 - Sintaxe export abstract class BaseService {}  
+            63.2.5 - Para obter a url da api criar um constate - protected UrlServiceV1: string = "" - V1 porque esta versionando
+            63.2.6 - Criar um metodo para obter o header json:
+
+                         protected ObterHeaderJson(){
+                            return {
+                                headers: new HttpHeaders({
+                                    'Content-Type': 'application/json'
+                                })
+                            };
+                        }
+                        Toda vez que chamar esse metodo vai retornar header que vai pode utilizar varias vezes.
+            63.2.7 - Inclui a herança da classe BaseService na classe ContaService do arquivo conta.service.ts
+                Alterado de export class ContaService  { -- para export class ContaService extends BaseService {
+                E por padrão do typescript é obrigado incluir a class super na linha do construtor quando utiliza uma herança
+                altera de constructor(private http: HttpClient){} para constructor(private http: HttpClient){ super(); }
+            63.2.8 - No metodo   alterar o post de .post('' ,usuario ) para .post(this.UrlServiceV1 + 'nova-conta' ,usuario,this.ObterHeaderJson()) -- 'nova-conta' está na documentação do swagger
+            63.2.9 - Na BaseService foi criado o metodo  
+                protected extractData(response: any
+                    return response.data || {};
+                }//explicação extractData recebe o response de qualquer coisa 'any' e retorna o response data caso não encontre retorna um objeto vazio  '|| {}' apenas
+                    mapeando um no do response no metodo
+            63.2.10 - No metodo registrarUsuario alterado depois map() para  map(this.extractData) fazendo a extração do resultado da api
+            63.2.11 - No tratamento foi criado o metodo:
+                    protected serviceError(response: Response | any){
+                            let customError: string[] = [];
+                        if(response instanceof HttpErrorResponse){
+                                if(response.statusText === "Unknown Error"){    
+                                customError.push("ocorreu um erro desconhecido");
+                                response.error.errors = customError;
+                                }
+                        }   
+                        console.error(response);
+                        return throwError(response);
+                    }explicação: recebe um response ou qualquer coisa 'any'
+                     criado uma coleção de string  customError, caso receba um erro de  HttpErrorResponse e o response.statusText é um erro desconhecido
+                     customError.push adicionar 'push' a mesansagem generica e não informar nada no client para não dar uma pista de como funciona por traz do codigo a hackers
+                     No  response.error que é o resultado de error e .errors vou adicionar a mensagem dentro da coll ection
+                     console.error(response); loga esse erro no console do browser que é opcional
+                     e retornar  return throwError(response); que vai lançar esse erro pra ser pego em outro lugar para estourar no Observable
+                     e a aplicação entenda que ouve um erro. 
+                     if(response. retorna a mensagem ou numero do erro do response ou status = 200 ou 500 da api e pode tratar com mensagens personalizadas.
+            63.2.12 - Colocar o  serviceError na  catchError(this.serviceError)); linha 22 do arquivo conta.service.ts
+            63.2.12 - Setar a protected UrlServiceV1: string = "https://localhost:5001/api/v1/"; da calsse BaseService apenas nesse topico e nas proximas aulas vai 
+                     ter uma maneira melhor de fazer isso                     
+    63.3 - Na pasta cadastro arquivo cadastro.component.ts alterar o metodo  this.contaService.registraUsuario(this.usuario); para
+           que agora é uma Observable então tem de incluir uma .subscribe();para tratar o sucesso e o erro nessa situação
+             .subscribe(
+                      sucesso =>{},// vai para alguma coisa
+                      falha =>{}// vai para alguma coisa 
+                    ); 
+            Criar o metodos vazios  processarSucesso(response: any){} e processarFalha(fail: any){} depois vai implementar
+            Adiciona a chamada no metodo 
+            this.contaService.registraUsuario(this.usuario)
+            .subscribe(
+                  sucesso =>{this.processarSucesso(sucesso)},
+                  falha =>{this.processarFalha(falha)}
+                ); 
+    63.4 - Para testar abrir o backend incluir black point na linha 43 do arquivo AuthController.cs da pasta V1
+    64 - Tratando os responses do servidor inicia no metodo processarFalha(fail: any) do arquivo cadastro.componet.ts
+              até esse ponto esse metodo estava vazio sem nenhuma implementação
+              Toda explicação esta mapeada no codigo
+    65 - Variáveis por tipo de ambiente
+        Para mudar a variavel ou todas as informações que serão usadas no ambiente de desenvolvimento ou produção:
+        55.1 - Ja existe um replace automatico configurado na linha 33 do arquivo angular.json
+            "production": {
+                        "fileRe     placements": [{         "replace": "src/environments/e      nvironment.ts",         "with": "src/environments/envir        onment.p        rod.ts"                   }],
+        
+        65.2 - para muda a Url basta criar uma estrutura igual no dois arquivos na pasta environments
+            export const environment = {
+              production: false,// se estiver true colocar no arquivo environment.prod.ts
+              apiUralV1: 'https://localhost:5001/api/v1/'
+            };
+        65.3 - Incluia variavel de ambiente no arquivo base.service.ts alterar a linha 15 de protected UrlServiceV1: string = "https://localhost:5001/api/v1/";
+                para protected UrlServiceV1: string = environment.apiUralV1;
+        65.4 - Para funcionar e selecionar a variavel de ambiente de acordo com o ambiente automaticamente basta compilar
+                na versão desenvolvimento 'ng s' ou produção ng s --prod
+        65.5 - Testar , fim da aula.
+    66 - Tratando um usuário logado
+        Objetivo : Ao invés dos botões Entrar e Criar Conta vai aparecer o e-mail e o botão sair quando o usuario estiver logado.
+                    Quando ousuario faz o cadastro ele já esta logado pelo metodo processarSucesso no arquivo cadastro.component.ts linha 109
+        66.1 - Na pasta navegacao criar a pasta menu-login
+        66.2 - Criar o arquivo componente menu-login.component.ts dentro dessa pasta nova
+        66.3 - Criar o arquivo componente menu-login.component.html dentro dessa pasta nova
+        66.4 - O menu-login.component.ts vai fazer apenas a parte de login copiei e colei o codigo e digitei a explicação dentro do proprio arquivo
+        66.5 - O menu-login.component.html vai fazer apenas a parte de login copiei e colei o codigo e digitei a explicação dentro do proprio arquivo
+        66.6 - Registrar o MenuLoginComponent no modulo NavegacaoModule no declarations e exports
+        66.7 Substituior no arquivo menu.component.html as linhas
+
+            de :
+                 <ul class="navbar-nav">
+                    <li class="nav-item" style="padding-right: 30px;">
+                        <a class="btn btn-primary" [routerLink] = "['/conta/login']">Entrar</a>
+                                        </li>
+                         <li class="nav-item">
+                             <a class="btn btn-success" [routerLink] = "['/conta/cadastro']">Crie sua conta</a>
+                         </li>
+                     </ul>
+            para:
+                    <app-menu-login></app-menu-login>
+                    fazendo a navegacao com base no componebte
+    
+    67 - Notificações com Toastr
+        67.1 Intalar com o comando "npm install ngx-toastr --save" da url https://www.npmjs.com/package/ngx-toastr
+        67.2 - Instalar o requisito obrigatorio npm install @angular/animations --save
+        67.3 - Incluir no arquivoangular.json o style "node_modules/ngx-toastr/toastr.css" na linha 28 caso não seja incluido na instalação
+                 "styles": [
+                                "src/styles.css",
+                                "node_modules/ngx-toastr/toastr.css" 
+                            ],
+        67.4 - Incluir as no app.module as linhas  BrowserAnimationsModule,  ToastrModule.forRoot() no imports
+            e import { ToastrModule } from 'ngx-toastr';  import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+        67.5 - Incluir no componente que vai usar a linha do import import { ToastrModule } from 'ngx-toastr'; nesse caso 
+                cadastro.component.ts e injetar ele por depencia no construtor
+        67.6 - Incluido a mensagem de erro 'this.toastr.error('Ocorreu um erro!','Opa :('); ' no metodo processarFalha
+        67.7 - Incluido a mensagem de erro 'this.toastr.success('Registro realizado com sucesso!','Bem vindo!!!'); ' no metodo processarFalha 
+        67.8 - Comentado o redirecionamento para home para visualizar o mensagem senão como o direcionamento é mais rapido não aparece
+        67.9 - Para visualizar o funcionamento do toastr foi comentado o direcionamento para pagina home, para arrumar isso 
+                foi incluido o codigo:
+                    let toast = this.toastr.success('Registro realizado com sucesso!','Bem vindo!!!');
+                    if(toast){
+                        toast.onHidden.subscribe(()=>{
+                          this.router.navigate(['/home']);
+                        })
+                    }
+                                        let toast = this.toastr.success('Registro realizado com sucesso!','Bem vindo!!!');
+                    if(toast){
+                        toast.onHidden.subscribe(()=>{
+                          this.router.navigate(['/home']);
+                        })
+                    }
+            Explicação:
+                    thisthis.toastr retorna uma active toastr que é uma promisse
+                    Se declara a variavel vai ser um active toastr então posso fazer o if o toastr esta instaciado é um objeto
+                    'let toast = ' 
+
+                    toast.onHidden que é um gatilho que retorna um Observable então posso usar um subscribe que vai para '()=>'
+                    this.router.navigate(['/home']);
+                    Na hora que o toastr sumir vai redirecionar
+                    toastr retorna um objeto que tem um Observable la dentro 
+        
+        67.10 -Resumo:
+                  Injetar o ToastService 'private toastr:ToastrService' na aplicação em qualquer componente e soltar os balões
+        
+    68 - Guardas de rotas - Objetivo implementar dois guardas de rotas, o primeiro vai pra guando estiver preenchendo um formulario
+                                e clicar em outra parte sem querer e saia da tela e perder o que foi digitado vai propor uma janela pop-up perguntando se vai deixar o formulario sem terminar dar um submit. 
+                                O segundo é pra quando estiver logado não acessar nem o cadastro e nem o login, se esta logado não precisa fazer o login ou criar uma nova conta .
+                                Vamos criar um guarda para não fazer isso quando estiver logado.
+
+        68.1 - Na aplicação pasta conta/service 'O guarda de rota é um serviço' criar um arquivo conta.guard.ts . 
+        68.1 - Nesse arquivo digitar a estrutura base que funciona como serviço de nome ContaGuard
+                import { Injectable } from "@angular/core";
+
+                        @Injectable()
+                        export class ContaGuard{
+                        
+                        } 
+        68.2 - Na aula de rotas pode implementar mais de um interface então vamos coloca o CanDeactive 'implements CanDeactivate'
+                import { Injectable } from "@angular/core";
+                        import { CanDeactivate } from "@angular/router";
+
+                        @Injectable()
+                        export class ContaGuard implements CanDeactivate{
+                        
+                        } 
+        
+        68.3 - Precisa implementar um componente nesse caso o cadastro
+
+                export class ContaGuard implements CanDeactivate<CadastroComponent>{
+
+                }
+        
+        68.4 - implementar o metodo canDeactivate da interface, basta passar o mouse no nome da classe ContaGuard e selecionar a opção do metodo
+            @Injectable()
+                export class ContaGuard implements CanDeactivate<CadastroComponent>{
+                    canDeactivate(component: CadastroComponent, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateS
+                        throw new Error("Method not implemented.");
+                    }
+                }
+        
+        68.5 - Ela vem bem suja apagar tudo que não precisa e deixar so o componente
+
+                @Injectable()
+                    export class ContaGuard implements CanDeactivate<CadastroComponent>{
+                    
+                        funcionamento: Esse metodo basicamente vai descobrir se eu já alterei o estado
+                        do componente e depois vai sugeri se eu quero realmente abandonar o preenchimento do formulario
+
+                        canDeactivate(component: CadastroComponent){
+                        {
+                            throw new Error("Method not implemented.");
+                        }
+                    
+                    }
+        
+        68.6 - Para o metodo canDeactivate funcionar eu preciso ir no cadastro.component e setar
+               uma propriedade que ela vai ser minha atual referencia
+
+               Criado a propriedade mudancaNaoSalvas:boolean; na linha 33
+
+        68.7 - A partir do momento que tirar o foco do formulario eu vou falar que as mudanças não salvas é igual a true.
+            Colocando a propriedade mudancaNaoSalvas nas linha 80 do metodo ngAfterViewInit
+
+            merge(...controlBlurs).subscribe(() => {
+                this.displayMessage = this.genericValidator.processarMensagens(this.cadastroForm);
+                this.mudancaNaoSalvas = true;
+
+        68.8 - E depois que processar as mudanças com sucesso eu vou poder dizer que a mudancaNaoSalvas = false
+                colocando essa propriedade na linha 97 do metodo adicionarConta
+
+                this.mudancaNaoSalvas = false;
+        
+        68.9 - E implementar na guarda de rota arquivo contaGuard.ts dentro do mento canDeactivate
+
+                     canDeactivate(component: CadastroComponent)
+                     {
+                         Caso as mudancaNaoSalvas seja false vou permitir que ele saia com return true
+                         if(component.mudancaNaoSalvas){
+                             return window.confirm('Tem certeza que deseja abandonar o preenchimento do formulario?');
+                         }
+                         return true
+                     }
+        68.10 - Ir no modulo conta.module.ts e cadastrar o  no providers
+                     providers:[
+                       ContaService,
+                       ContaGuard
+                     ]
+        68.11 - Ir na minha rota arquivo conta.route.ts e registrar que o CadastroComponent tem o canDeactivate que vai usar o contaGuard.
+                alterado de :
+                            children: [
+                                              {path: 'cadastro',component: CadastroComponent},
+                                              {path: 'login',component: LoginComponent}
+                                      ] 
+                para:                            
+                            children: [
+                                         {path: 'cadastro',component: CadastroComponent,canActivate:[ContaGuard]},
+                                         {path: 'login',component: LoginComponent}
+                                      ] 
+        68.12 - Se clicar em alguma link vai permitir que saia do formulario sem emitir uma mensagem
+                problema , até o momento o link meus produtos está assim <a class="navbar-brand" href="/">Meus Produtos</a> no arquivo
+                cadastro.component.html, para funcionar o guarda de rotas precisa altera para routerLink
+
+                <a class="navbar-brand" [routerLink]="['/home']">Meus Produtos</a>    
+
+                 <a class="navbar-brand" href="/">Meus Produtos</a> usando apenas o href="/" não é uma rota e
+                 esta direcionando para pasta base da url
+
+        68.13 - Vamos implementar o segundo guarda de rota que tem a intenção de evitar que nevegue pela pagina de login e cadastro de login
+                quando estiver logado.
+
+            68.13.1 - Implementar a interface canActivate
+                    incluir o codigo na linha con arquivo contaGuard
+                    de :export class ContaGuard implements CanDeactivate<CadastroComponent>{
+                    para:export class ContaGuard implements CanDeactivate<CadastroComponent>,CanActivate{
+           68.13.2 - Como é um interface ela vai sugerir um metodo mas foi digitado na mão linha 19
+                    apesar de void ele tem de retornar alguma coisa
+                    
+                    canActivate(){
+    
+                    }
+            68.13.3 - Validar se teum um usuario guardado no storage
+                     criar a variavel localStorageUtils = new LocalStorageUtils(); na linha 10 do arquivo contaGuard
+            68.13.4 - Colocar uma validação no metodo canActivate
+                    canActivate(){
+                                     if(this.localStorageUtils.obterTokenUsuario()){
+                                     }
+                                 }
+            68.13.5 - Criar constructor na linha 14
+                    constructor(private router:Router){}
+            68.13.6 - Incluir a navegação no metodo canActivate
+                    if(this.localStorageUtils.obterTokenUsuario()){
+                        this.router.navigate(['/home']);
+                    }
+                    return true
+
+                    se estiver logado navegar para home.Ele pode entrar na rota
+            68.13.7 - implementar o CanActivate atraves do contaGuard incluir no arquivo 
+
+                   de:  children: [
+                                         {path: 'cadastro',component: CadastroComponent,canDeactivate:[ContaGuard]},
+                                         {path: 'login',component: LoginComponent}
+                                 ] 
+                    para:
+                        children: [
+                                        {path: 'cadastro',component: CadastroComponent,canActivate:[ContaGuard],canDeactivate:[ContaGuard]},
+                                        {path: 'login',component: LoginComponent,canActivate:[ContaGuard]}
+                                  ] 
+            68.13.8 - Resumo: se for na url e digitar http://localhost:4200/conta/cadastro não pode ira para a pagina e retorna para home
+                        para http://localhost:4200/conta/login também vai bloquear o acesso a pagina.
+            68.13.9 - Todos os teste até aqui foram executado com sucesso.
+        
+    69 - Formulário de login 
+            69.1 - Copiado todo html do formulario de cadastro e colado no de login
+            69.2 - Alterado a ta h1 para Login
+            69.3 - Alterado a tag h4 para Entre na sua conta
+            69.4 - na tag form no (ngSubmit) alterar o metodo para "login()" e "cadastroForm" para "loginForm"
+            69.5 - Apagar a tag div de confirmação de senha
+            69.6 - Mudar o id do botão para login [disabled] muda para loginForm e o nome do botão para Login
+            69.7 - Copiar primeiro os imports "dependencias" do arquivo CadastroComponent.ts e colar no arquivo LoginComponent
+            69.8 - Copiar depois do selector para baixo "depois da linha export class" e colar abaixo do selector da linha com o nome da classe "export class LoginComponent"
+            69.9 - cadastroForm alterar para loginForm na linha depois da declaração errors ele já vai alterar nos demais lugares
+            69.10 - Apagar o confirmPassword  dentro do metodo validationMessages
+            69.11 - No metodo ngOnInit alterar a validação do password para  password: ['', [Validators.required,CustomValidators.rangeLength([6, 15])]]
+            69.12 - Apagar a virgula e apagar a variavel confirmPassword: senhaConfirm 
+            69.13 - Apagar this.mudancaNaoSalvas = true;
+            69.14 - Apagar as linhas que validam a senha e confirmação de senha
+                let senha = new FormControl('', [Validators.required,CustomValidators.rangeLength([6, 15])]);
+                let senhaConfirm = new FormControl('', [Validators.required, CustomValidators.rangeLength([6, 15]), CustomValidators.equalTo(senha)]);       
+            69.14 - Alterar o metodo adicionarConta de :
+                    adicionarConta(){
+                                  if(this.cadastroForm.dirty && this.cadastroForm.valid){
+                                      this.usuario = Object.assign({},this.usuario,this.cadastroForm.value);
+                                      this.contaService.registraUsuario(this.usuario)
+                                      .subscribe(
+                                        sucesso =>{this.processarSucesso(sucesso)},
+                                        falha =>{this.processarFalha(falha)}
+                                      );
+                                      this.mudancaNaoSalvas = false;
+                                  }
+                                }
+                para:
+
+                    login(){
+                              if(this.loginForm.dirty && this.loginForm.valid){
+                                  this.usuario = Object.assign({},this.usuario,this.loginForm.value);
+
+                                  this.contaService.login(this.usuario)
+                                  .subscribe(
+                                    sucesso =>{this.processarSucesso(sucesso)},
+                                    falha =>{this.processarFalha(falha)}
+                                  );
+                               }
+                            }
+                    obs: Vai dar erro no subscribe porque ainda não foi implementado até esse ponto.
+            
+            69.15 - No serviço arquivo conta.service na pasta service implementar o meto de login 
+            
+                    de:
+
+                        login(usuario: Usuario){
+
+                     }
+
+                     para:
+
+                     login(usuario: Usuario): Observable<Usuario>{
+                                let response = this.http
+                                    .post(this.UrlServiceV1 + 'entrar' ,usuario,this.ObterHeaderJson())
+                                    .pipe(
+                                        map(this.extractData),
+                                        catchError(this.serviceError));
+
+                                    return response;
+                            }
+                
+                obs: O login vai fazer um post igual registraUsuario então basta apenas copiar o conteudo do registrarUsuario
+                e colar no login alterando o final do endpoint de "+ 'nova-conta'" para "+ 'entrar'" que é o metodo criado na API
+                é so consultar o swagger da api para verificar.
+                : Observable<Usuario> esse Observable especifica o retorno do metodo.
+            
+            69.16 - Mudar as mensagens 
+            69.17 - O titulo login e cadastro está colodo no teto então para altera e deixar um pouco abaixo foi acrescentado uma alteração no 
+                    arquivo style.css as linhas:
+
+                    .main-container{
+                        padding-top: 25px;
+                        padding-right: 15px;
+                        padding-lef: 15px;
+                        padding-bottom: 100px;
+                        margin-right: auto;
+                        margin-left: auto;
+                        overflow:   hidden;
+                    }
+            69.18 - Resumo - tudo que precisava validar já veio do cadastro,precisou só altera os metodo e apagar o que não era necessário para o login
+             e até aqui foi tudo compilado sem erro e concluido a autenticação do usuario.
+             Ao digitar o login e senha ele fica guardado no localStorage e o guarda de rotas não deixa voltar a pagina de cadastro e login
+             fazendo a aplicação mais inteligente.
+        
+    70 - CRUD de Forncedores - A aula apenas faz uma explicação geral de como vai ser todas as telas de CRUD dos fornecedores
+            70.1 - Copiado todo as telas do exemplo da aula do codigo pronto
+            70.2 - Incluido a routerLink no menu de navegação
+            70.3 - Incluido a linha no app.routing.module , abaixo da opção conta, sem isso vai pra pagina de erro ao clicar no link do menu
+                    {
+                     path: 'fornecedores',
+                     loadChildren: () => import('./fornecedor/fornecedor.module')
+                       .then(m => m.FornecedorModule)
+                    ,
+            70.4 - Apenas a funcionalidade lista da pasta com o mesmo nome está completa e testado tudo funcionou ok
+        
+    71 - Inclusão de fornecedor
+
+        71.1 A primeira alteração a fazer nesse CRUD pronto de fornecedores é ir na tela de inclusão e 
+        definir as propriedadades que estão aninhadas , como são entidades diferentes e no json vem uma dentro da outra a Sintaxe
+        deve criar o objeto endereco: this.fb.group({}) com as propriedades dentro
+            Aninhadas na 
+
+            de:
+                ngOnInit() {
+                              this.fornecedorForm = this.fb.group({
+                                nome: ['', [Validators.required]],
+                                documento: ['', [Validators.required]],
+                                ativo: ['', [Validators.required]],
+                                tipoFornecedor: ['', [Validators.required]]   
+                              });
+                            }
+            para:
+                ngOnInit() {
+                              this.fornecedorForm = this.fb.group({
+                                nome: ['', [Validators.required]],
+                                documento: ['', [Validators.required]],
+                                ativo: ['', [Validators.required]],
+                                tipoFornecedor: ['', [Validators.required]],
+
+                                endereco: this.fb.group({
+                                  logradouro: ['', [Validators.required]],
+                                  numero: ['', [Validators.required]],
+                                  complemento: ['', [Validators.required]],
+                                  bairro: ['', [Validators.required]],
+                                  cep: ['', [Validators.required]],
+                                  cidade: ['', [Validators.required]],
+                                  estado: ['', [Validators.required]]
+                                })
+                              });
+                              }
+                
+            E no html na pagina novo.component.html linha 52 que é a div principal do endereco foi alterado a tag  <div>   
+             para <div formGroupName="endereco"> esse comando siginifica que voce tem uma propriedade "endereco" que representa e vai dar
+             um submit em todos os dados do formulario que estão aninhados dentro de fornercedores retornado das API json,
+             essa propriedade esta no ngOnInit() no arquivo novo.component.ts . Feito isso todos os dados da formma correta.
+
+        71.2 Quando usar varios radiobutton que só podemos escolher um por ver as propriedade id, formControlName name devem ter
+            o mesmo nome nesse caso tipoFornecedor e vai receber um dado diferente o dados está desse jeito value="1"
+            que é a regra de negocio do nosso backend.
+
+        71.3 - Para setar de cara um radiobutton deixando selecionado ao entrar na pagina vamos usar o patchValue
+
+                sintaxe this.fornecedorForm.patchValue({tipoFornecedor:'1',ativo:true}); incluido no metodo ngOnInit
+        
+        71.4 - Se na tela for escolhido o radiobutton de pessoa fisica ou juridica como validar se foi digitado cpf ou cnpj?
+            71.4.1 - Vamos precisa de validação então vamo usar o componente ng-brazil que vai diretivas de validação e mascaras
+                    então alem de validar o dados vamos poder usa a mascara
+            71.4.2 Instalar o componente com o comando npm i ng-brazil
+            71.4.3 npm i -S angular2-text-mask text-mask-addons se quiser usar mais detalhes de marcaras
+            todas os componentes estão no arquivo package.json
+            71.4.4 Para usar esse componente incialmente no modulo de fornecedor que está necessitando nesse ponto
+                temos de incluir NgBrazil nos modulos fornecedor.module e importa tambem o TextMaskModule que outro
+                que precisa para trabalhar com as mascaras e tudo mais , ele vai permitir aplicar no componente.
+            71.4.5 A primeira coisa a fazer é como validar cpf ou cnpj por padrão vem setado como pessoa fisica então 
+                vamos falar que o documento como cpf para isso colocar o documento: ['', [Validators.required]] 
+                para documento: ['', [Validators.required, NgBrazilValidators.cpf]]
+            71.4.6 Nas mensagem podemos incluir de: documento: { required: 'Informe o Documento'}
+                   para: documento: { required: 'Informe o Documento',  cpf: 'CPF em formato inválido',}
+                   para informa cpf inválido.Para já ter a mensagem de validação. neese ponto apenas valida sem mascara.
+            71.4.7 Para incluir a mascara temos que fazer outra configuração importa a bblioteca import { utilsBr } from 'js-brasil';
+                no arquivo novo.component.ts biblioteca javascript de mascara.
+            71.4.8 E para essa biblioteca funcionar criar uma propriedade chamada MASKS = utilsBr.MASKS; na linha 32
+                para poder aplicar a mascara no html
+            71.4.9 Onde tem o documento n html pensar apenas nesse momento como cpf [textMask]="{mask: MASKS.cpf.textMask}" 
+                <input class="form-control" id="documento" type="text" placeholder="(requerido)" formControlName="documento" cpf [textMask]="{mask: MASKS.cpf.textMask}" [ngClass]="{'is-invalid': displayMessage.documento }" />
+                cpf na frente do [textMask] é uma propridade que ele manda colocar na documentação
+            71.4.10 Gerou erro porque esqueci de colocar a virgula no final do imports "TextMaskModule," no 
+                fornecedor.module.ts que é o modulo local do CRUD de fornercedores.
+        72 - APlicação compilado sem erro e testada apenas com validação do cpf até esse ponto.
+        72.II - Inclusão de fornecedor - pt II
+            72.II.1 - Objetivo Validar CPF ou CNPJ ao clicar no option button
+            72.II.2 - Primeira paaso criar a propriedade textoDocumento: string ='CPF (Requerido)' no arquivo novo.component.ts
+            72.II.3 - Incluir a propriedade no placeholder do input documento placeholder ="{{textoDocumento}}" vai aparecer dentro do input a frase no arquivo novo.component.html.
+            72.II.4 - Criar uma nova mensagem de validação no arquivo novo.component.ts linha 51  cnpj: 'CNPJ em formato inválido' metodo validationMessages 
+            72.II.5 - Lembrete do metodo ngAfterViewInit quando a view estiver pronta 'renderizada no browser' vai ser chamado esse metodo
+            72.II.6 - Vai recolher todos os elementos de input this.formInputElements e adicionar um trigger com uma Observable
+                    quando houver um evento blur 'tira o foco de uma coisa da tela'.
+                    Mas como alterar isso para  deixar fazer a validação antes do evento blur ?    
+            72.II.7 - Vamos fazer as seguintes modificações:
+                1 - Dividir o que acontece dentro do metodo ngAfterViewInit em duas parentes
+                2 - Criar um metodo chamado no arquivo novo.component.ts
+                        validaFormulario(){
+                             this.displayMessage = this.genericValidator.processarMensagens(this.fornecedorForm);
+                             this.mudancasNaoSalvas = true;       
+                                }
+                3 - Esse metodo só vai ser chamado só quando eu quiser processar as mensagens de validação
+                4 - this.mudancasNaoSalvas é para ter o controle de quando todas as opções não foram preenchidas e o usuario 
+                    tenta sair da pagina
+   }            5- Criar outro metodo chamado de 
+                                configurarElementosValidacao(){
+
+                                }
+                6 - Copiar tudo o que o metodo ngAfterViewInit está fazendo e colar nesse metodo.
+
+                        configurarElementosValidacao(){
+                        
+                        let controlBlurs: Observable<any>[] = this.formInputElements
+                              .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+                            merge(...controlBlurs).subscribe(() => {
+                              this.displayMessage = this.genericValidator.processarMensagens(this.fornecedorForm);
+                              this.mudancasNaoSalvas = true;
+                            });
+                        
+                        }
+                7 - Alterar o merge de:
+                        merge(...controlBlurs).subscribe(() => {
+                          this.displayMessage = this.genericValidator.processarMensagens(this.fornecedorForm);
+                          this.mudancasNaoSalvas = true;
+                        }); 
+
+                        para:
+                                  merge(...controlBlurs).subscribe(() => {
+                                  this.validaFormulario();        
+                                })
+                    explicação: Eu quero chamar o metodo validaFormulario a hora que eu quiser independente do merge
+                                estar ocorrendo, estamo segregando as funcionalidade para inclusive facilitar a manutenção
+                                do código.
+
+                8 - No metodo AfterViewInit apagar e copiar o metodo configurarElementosValidacao()
+
+                        ngAfterViewInit(): void {
+                                                  this.configurarElementosValidacao();   
+                                                }
+                   explicação: porque desse modo posso chamar a hora que eu quiser também não preciso que a view
+                                se inicialize e faça tudo de uma vez só. Estou segregando para chamar ao hora que eu quiser.
+
+                9 - Agora preciso trabalhar com os tipos de dados que eu tenho disponiveis que é o tipoFornecedor
+                    com base no tipo de fornecedor pessoa fisica ou juridica eu vou trocar o comportamento do formulario
+
+                10 - A primeira coisa a fazer é ter acesso a esse controle de uma forma simples vou criar um metodo:
+                        tipoFornecedorForm(): AbstractControl{
+                            return this.fornecedorForm.get('tipoFornecedor');
+                        }
+                    explicação: ele é do tipo AbstractControl ou seja é um controle isolado ele apenas devolve um controle  
+                                do formulario e para obte-lo vou fazer this.fornecedorForm.get('tipoFornecedor') que é exatamento
+                                o nome que está nas tags de controls do input radiobutton id="tipoFornecedor" do arquivo novo.component.html
+                                A view que mostra os controles no browser renderizados. É o mesmo nome que está setado no formGroup tipoFornecedor: ['', [Validators.required]].
+                                Vou retornar o campo tipoFornecedor para que eu posso obter o estado dele.
+                                Com base nisso vou criar um metodo para trocar a validação do documento.
+                
+                11 - Cria metodo trocaValidacaoDocumento:
+
+                            trocaValidacaoDocumento(){
+                                if(this.tipoFornecedorForm().value == "1"){
+
+                                }
+                                else{
+
+                                }
+                            }
+                12 - Preciso criar Metodo para pegar o estado do documento
+                    documento(): AbstractControl{
+                              return this.fornecedorForm.get('documento');
+                            }
+
+                13 - Para limpar as validações do formulario:
+                    
+                    trocaValidacaoDocumento(){
+                             if(this.tipoFornecedorForm().value == "1"){
+                               this.documento().clearAsyncValidators();
+                             }
+                             else{
+                             }
+                            }
+                14 - Como eu quero validar as validaçãos do cpf adicina no if.
+
+                        trocaValidacaoDocumento(){
+                          if(this.tipoFornecedorForm().value == "1"){
+                            this.documento().clearAsyncValidators();
+                            this.documento().setAsyncValidators([Validators.required, NgBrazilValidators.cpf]);
+                          }
+                          else{
+                          }
+                        }
+                15 - E por ultimo o texto que vai no placeholder:
+
+                         trocaValidacaoDocumento(){
+                               if(this.tipoFornecedorForm().value == "1"){
+                                 this.documento().clearAsyncValidators();
+                                 this.documento().setAsyncValidators([Validators.required, NgBrazilValidators.cpf]);
+                                 this.textoDocumento = 'CPF (Requerido)';
+                               }
+                               else{
+                               }
+                             }
+                16 - Fazer a mesma coisa para o else quando for validar CNPJ
+
+                         trocaValidacaoDocumento(){
+                                   if(this.tipoFornecedorForm().value == "1"){
+                                     this.documento().clearValidators();
+                                     this.documento().setValidators([Validators.required, NgBrazilValidators.cpf]);
+                                     this.textoDocumento = 'CPF (Requerido)';
+                                   }
+                                   else{
+                                     this.documento().clearValidators();
+                                     this.documento().setValidators([Validators.required, NgBrazilValidators.cnpj]);
+                                     this.textoDocumento = 'CNPJ (Requerido)';
+                                   }
+                                 }
+                17 - A ação precisa ser disparada como fazer isso?
+                    Dentro do AfterViewInit vou configurar as validacao padrao e configurar outras
+
+
+                     ngAfterViewInit(): void {
+                                           this.tipoFornecedorForm().valueChanges
+                                           .subscribe( () =>{
+                                             this.trocaValidacaoDocumento();
+                                             this.configurarElementosValidacao();
+                                             this.validaFormulario();
+                                           } );
+                                           this.configurarElementosValidacao();   
+                                         }
+
+                    explicação: valueChanges é uma Observable então o que eu to falando é quando o tipoFornecedor
+                                mudar eu quero dar um subscribe aqui pra fazer alguma coisa com isso.
+                                É um parametro void ( () =>{}
+                                Vai dar um subscribe para executar uma serie de coisas.
+                                this.trocaValidacaoDocumento(); - troca a validação do documento
+                                e uma vez q ue trocou a validação do documento eu quero this.configurarElementosValidacao(); também,
+                                porque eu preciso atualizar todos os controles, não me preocupar em ficar criando Observable encima de
+                                Observable, ele vai substituir essas Observable por outras,não precisa criar listas infinitas porque ele
+                                vai reescrever em meomoria porque os controles são os mesmos.e já que estou trocando eu vou usar o metodo
+                                this.validaFormulario(); para validar também . Não precisaria chamar o metodo this.validaFormulario() porqueele já está
+                                dentro do metodo merge,porem quando chama o metodo this.configurarElementosValidacao(); ele não chama this.validaFormulario(); 
+                                Ele esta fazendo um merge para quando for necessario validar, mas se quiser chamar agora não tem problema chamar depois
+                                do metodo this.configurarElementosValidacao(); dentro do ngAfterViewInit(). Por isso foi separado em metodos
+                                segregados para ter o controle deles e chamar a hora que quiser.
+
+                18 - Até aqui está mudando a frase mas não está alterando a mascara e como resolver?
+                        Aqui no html tag input cpf [textMask]="{mask: MASKS.cpf.textMask}" estou falando que está montando a mascara para cpf
+                        não vamos criar um campo documento cpf e outro cnpj e ficar ocultando e mostrando que vai dar muito mais trabalho,até
+                        porque no momento que der um Observable no elementos let controlBlurs: Observable<any>[] = this.formInputElements
+                        qualquer campo que estiver escondido vai ser ignorado então ele não vai fazer parte da coleção o ideal é trabalhar com um campo 
+                        e alterar o comportamento dinamicamente e pra resolver usar um if ternario no html,
+                        alterar de:
+
+                            cpf [textMask]="{mask: MASKS.cpf.textMask}"
+
+                        para:
+
+                            [textMask]="tipoFornecedorForm().value==='1' ? {mask: MASKS.cpf.textMask}: {mask: MASKS.cnpj.textMask}"
+
+
+                19 - Para finalizar vamos validar e colocar mascara no cep:
+                    1 -  mascara no html cep [textMask]="{mask: MASKS.cep.textMask}" 
+                    2 - Criado a propriedade cep: 'CEP em formato inválido'
+                    3 - Adicionado a validação  cep: ['', [Validators.required,NgBrazilValidators.cep]] do ng brasil.
+                            
+        73 - Inclusão de fornecedor - pt III Inclusão de CEP
+
+            73.1 - Primeiro no component novo.component.html adicionar evento no controle de cep na caixa de texto que vai ser um bind também
+            com base no evento blur (blur)="buscarCep($event.target.value)" que estmos usando para validação só que esse aqui vai ser disparado apenas
+            para caixa de texto. Vai acionar o buscarCep e ao adicionar "$event.target.value' é o valor da ciaxa de texto.
+
+            73.2 - Adicionando o metodo no arquivo novo.component.ts que vai consumir o serviço do cep da api da 
+                    pagina https://viacep.com.br/ws/08011680/json/ configurada no arquivo fornecedor.service
+                  
+                  buscarCep(cep: string){}
+            73.3 - Criar uma model especifica para consulta de cep dentro da pasta model arquivo endereco.ts, é importante
+                    que tenha isso tipado para facilitar a navegação nos objetos.
+
+                    export class CepConsulta{
+                        cep: string;
+                        logradouro: string;
+                        complemento: string;
+                        bairro: string;
+                        localidade: string;
+                        uf: string;
+                    }
+            
+            73.4 - Criar o metodo de servico no arquivo fornecedor.service.ts
+
+                    consultaCep(cep: string): Observable<CepConsulta>{
+
+                        return this.http
+                        .get<CepConsulta>('https://viacep.com.br/ws/${cep}/json/') --esse está gerando erro
+                        .get<CepConsulta>('https://viacep.com.br/ws/'+cep+'/json/') --esse está ok
+                        .get<CepConsulta>(`https://viacep.com.br/ws/${cep}/json/`)  --esse está ok usar com acento e não aspas simples
+                        .pipe(catchError(super.serviceError))
+                    }
+
+                    explicação:  Vai retornar uma Observable de CepConsulta, vai receber um string e fazer a consulta com base
+                                no http this.http que já está injetado
+                                vamos fazer um get tipado do como CepConsulta esse retorno passado a url .get<CepConsulta>('https://viacep.com.br/ws/${cep}/json/')
+                                ${cep} o valor está concatenado com interpolação usando a craze em vez das aspas simples
+                                Caso gere erro vamos fazer o mesmo tratamento .pipe(catchError(super.serviceError)) usando
+                                o metodo da classe heradade BaseService.
+            
+            73.5 E vamos incluir o codigo para consumir no componente novo.Component.ts
+
+                 buscarCep(cep: string){
+                     this.fornecedorService.consultaCep(cep)
+                     .subscribe(
+                         cepRetorno => this.preencherEnderecoConsulta(cepRetorno),
+                         erro => this.errors.push(erro));
+                 }
+
+                 explicação:
+                        this.fornecedorService.consultaCep(cep) é o arquivo do serviço ponto o metodo.
+                        O resultado é uma Observable então precisa do subscribe e chamar de cepRetorno
+                        esse cepRetorno vai ser passado como parametro no metodo preencherEnderecoConsulta que vai dar porque não existe
+                        erro => this.errors.push(erro)); ca erro vamos pegar a lista de erro vamos dar um push já que é um array na lista
+                        para ser exibida na tela caso queira que seja exibido 
+
+            73.6 - preencherEnderecoConsulta
+
+                    Ele vai fica desse jeito
+
+                    preencherEnderecoConsulta(cepConsulta: CepConsulta){
+                        this.fornecedorForm.patchValue({
+                            endereco: {
+                                logradouro: cepConsulta.logradouro,
+                                baiiro: cepConsulta.bairro,
+                                cep: cepConsulta.cep,
+                                cidade: cepConsulta.localidade,
+                                estado: cepConsulta.uf
+                            }
+                        });
+                    }
+
+                    Explicação: Aqui vamos receber o cep com valor tipado a(cepConsulta: CepConsulta)
+                                this.fornecedorForm.patchValue o patchValue de um dado aninhado tem de ficar desse jeito
+                                tem uma chave json dentro da outra
+
+                                this.fornecedorForm.patchValue({
+                                    endereco: { 
+                                        logradouro: cepConsulta.logradouro,
+                                        baiiro: cepConsulta.bairro,
+                                        cep: cepConsulta.cep,
+                                        cidade: cepConsulta.cidade,
+                                        estado: cepConsulta.uf
+                                    }
+                                });
+
+                                endereco: - propriedade endereço do fornecedor
+                                cepConsulta.cep das que retonam da consulta de cep
+                                nesse ponto vai gerar porque estmos enviando o codigo do cep com mascara
+                
+                73.7 - Adicionado o arquivo string-utils.ts na pasta utils para validar numero com a nova classe StringUtils
+                        export class StringUtils {
+
+                                    public static isNullOrEmpty(val: string) : boolean {
+                                        if (val === undefined || val === null || val.trim() === '') {
+                                            return true;
+                                        }
+                                        return false;
+                                    };
+
+                                    public static somenteNumeros(numero: string) : string {
+                                        return numero.replace(/[^0-9]/g,'');
+                                    }
+                                }
+
+                        funcionalidade:
+                                O metodo isNullOrEmpty é para descobrir se a string está vazia ou nula
+                                e o somenteNumeros que atraves de uma expressão regular retorna apenas numeros de uma string
+                    
+                73.8 - Vamos implementar a retirada da mascara no nosso componente novo.Component.ts metodo buscarCep
+
+
+                        buscarCep(cep: string){
+
+                            cep = StringUtils.somenteNumeros(cep); -- cep vai receber a chamada do StringUtils somente numero do proprio cep
+                            if(cep.length < 8 ) return; - Se o tamanho do cep for menor que retorna void para não consulta com cep invalido
+
+                              this.fornecedorService.consultaCep(cep)
+                              .subscribe(
+                                cepRetorno => this.preencherEnderecoConsulta(cepRetorno),
+                                erro => this.errors.push(erro));
+                            }
+
+                73.9 - Vamos garantir o metodo adicionarFornecedor
+
+                           this.fornecedor = Object.assign({}, this.fornecedor, this.fornecedorForm.value); 
+                           pega o objeto do formulario e transformando em um fornecedor
+            
+                           this.formResult = JSON.stringify(this.fornecedor);
+                           Está transformado o resultado em string para exibir no final da tela para apenas acompanhar o preenchimento da tela
+            
+                           this.fornecedorService.novoFornecedor(this.fornecedor)
+                           Aqui está chamado o metodo novoFornecedor
+            
+                           .subscribe(
+                                 sucesso => { this.processarSucesso(sucesso) },
+                                falha => { this.processarFalha(falha) }
+                                processando sucesso e erro e mostrando as mensagens na tela
+
+                73.10 - O metodo novoFornecedor no fornecedor.service não esta feito vamos implementar
+                    1 - Vamos copiar e colar o codigo do metodo obterTodos para começar
+                            obterTodos(): Observable<Fornecedor[]> {
+                                    return this.http
+                                        .get<Fornecedor[]>(this.UrlServiceV1 + "fornecedores")
+                                        .pipe(catchError(super.serviceError));
+                                }
+                                obterPorId(id: string): Observable<Fornecedor> {
+                                    return new Observable<Fornecedor>();
+
+                            de:
+                                novoFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
+                                    return new Observable<Fornecedor>();
+                                }
+                            
+                            para:
+                                novoFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
+                                    return this.http
+                                            .get<Fornecedor[]>(this.UrlServiceV1 + "fornecedores")
+                                            .pipe(catchError(super.serviceError));
+                                }
+
+                            alterado para:
+
+                             novoFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
+                                     return this.http
+                                             .post(this.UrlServiceV1 + "fornecedores",fornecedor,this.ObterHeaderJson()) 
+                                             alterar para post retirar o tipo <Fornecedor[]>
+                                             fornecedor,this.ObterHeaderJson() incluido fornecedor para enviar o que o metodo está recebendo na assinatura
+                                             this.ObterHeaderJson() para poder serializar corretamente a mensagem
+                                             .pipe(
+                                                 map(super.extractData),
+                                                 incluido o map para tratar o retorno super da classe extends BaseService e fazer o extractData que retorna o .data que é o resultado da api
+                                                 catchError(super.serviceError));
+                                 }
+
+                                 obs: Vai precisar dos operadores imports para map.
+
+                73.11 - Usar o metodo com acento igual ao exemplo para obter o token no metodo ObterAuthHeaderJson da base.service.ts
+                        public token: string = `Bearer ${this.LocalStorage.obterTokenUsuario()}`;
+                
+                73.12 - Incluir o id do usuario na tabela MinhaApiCore].[dbo].[AspNetUserClaims] com as permissoes dos [ClaimsAuthorize("Fornecedor","Adicionar")]
+                        caso não exista não vai chamar o metodo public async Task<ActionResult<FornecedorViewModel>> Adicionar(FornecedorViewModel fornecedorViewModel)
+                        na API
+
+                73.13 - Cuidado com os tipo aqui  estava this.fornecedorForm.patchValue({tipoFornecedor:'1',ativo:true});
+                    gerou erro no tipoFornecedor:'1' pois o tipoFornecedor na model é number
+                    corrigido para  this.fornecedorForm.patchValue({tipoFornecedor:1,ativo:true});
+
+                        export class Fornecedor {
+                                id: string;
+                                nome: string;
+                                documento: string;
+                                ativo: boolean;
+                                tipoFornecedor: number;
+                                endereco: Endereco;
+                            }
+                        Por causa desse eero a API estava recebendo objeto null no metodo public async Task<ActionResult<FornecedorViewModel>> Adicionar(FornecedorViewModel fornecedorViewModel)
+
+        74 - Utilizando resolvers em consultas
+
+              Explicação: Resolvers é uma tecnica utilizada no codigo para antecipar a pesquisa na API antes de clicar em algum botão
+              na tela pra preencher um painel com informações,isso da impressão para o usuário que o sistema está mais rápido, mas 
+              a pesquisa demora o mesmo tempo, só que é feita antes de renderizar a tela.
+
+            74.1 - Criar o arquivo fornecedor.resolve.ts  e incluido o código:
+
+                    import { Injectable } from "@angular/core";
+                    import { Resolve,ActivatedRouteSnapshot } from "@angular/router ";
+                    import { Fornecedor } from "../models/fornecedor";
+                    import { FornecedorService } from "./fornecedor.service";
+
+                    @Injectable()
+                    export class FornecedorResolve implements Resolve<Fornecedor>{
+                    
+                        constructor(private fornecedorService: FornecedorService){ }
+
+                        resolve(route: ActivatedRouteSnapshot){
+                        
+                            return this.fornecedorService.obterPorId(route.params['id']);
+
+                        }
+
+                    }
+                explicação: o import { Resolve,ActivatedRouteSnapshot } from "@angular/router "; é a referencia que faz a técnica acontecer
+                Injetado serviço que busca os dado na API no constructor(private fornecedorService: FornecedorService){ }
+                Criado o metodo resolve que obtem o resultado pela consulta do metodo obterPorId passado id do fornecedor.
+
+            74.2 - Alterado o codigo que busca as informações no arquivo editar.Component.ts as linhas:
+                    // this.fornecedorService.obterPorId(route.params['id'])
+                    // .subscribe(fornecedor => this.fornecedor = fornecedor)
+                    foram substituidas pelo codigo que é a rota ativa snapshot onde os dados serão consultados
+                    this.fornecedor = this.route.snapshot.data['fornecedor']; 
+                    this.route - foi injetado no construtor
+                    snapshot.data fazem parte do arquivo router.d.ts instalado na subpasta upgrade dentro da pasta router do nodes_modules
+            
+            74.3 - Não esquecer de registrar a class  FornecedorResolve no arquivo do mudule local fornecedor.module.ts em providers
+                    providers: [
+                                FornecedorService,
+                                FornecedorResolve
+            74.4 - Incluido as linhas que não existiam no arquivo fornecedor.service metodo obterPorId, deu erro ao clicar no
+                    botão editar porque estava faltando esse código.
+                    
+                    return this.http
+                        .get<Fornecedor>(this.UrlServiceV1 + "fornecedores/" + id, super.ObterAuthHeaderJson())
+                        .pipe(catchError(super.serviceError));
+
+            74.5 - Incluido as linhas no arquivo fornecedor.route.ts para ao clicar no grid de editar,visualizar, excluir as
+                    informações da linha seleciona sejam visualizadas nessa telas.
+
+                     path: 'detalhes/:id', component: DetalhesComponent,
+                     resolve: {
+                         fornecedor: FornecedorResolve
+                     }
+
+                      path: 'excluir/:id', component: ExcluirComponent,
+                     resolve: {
+                         fornecedor: FornecedorResolve
+                     }
+            
+            74.6 - Resumo ao clicar no botões de editar,visualizar,excluir no grid com a pesquisa de fornecedores as telas 
+                    vão aparecer com as informações já carregadas sem demorar quase nada porque com o resolve a pesquisa é feito antes
+                    da tela iniciar.
+                    
+        75 - Edição em tela mestre detalhes com pop-up modal
+                Objetivo: Editar o endereço abrindo um modal com todas as informações do grid
+
+            75.1 - Primeira coisa é incluir o template do modal depois da tag de fechamento do form </form> no arquivo editar.component.html
+                    Template basico que vai ficar escondido até algum evento provocar o surgimento:
+
+                     <ng-template #content let-c="close" let-d="dismiss">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modal-basic-title">Atualizar Endereço</h4>
+                            <button type="button" class="close" aria-label="Close" (click)="d('')">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                        </div>
+                        <div class="modal-body">
+                            info
+                        </div>
+                    </ng-template>
+            75.2 - Codigo para chamar a modal no .ts
+                    1 - Injertar no constructor o modal service 'private modalService: NgbModal'
+                    2 - Agora fazer a chamada da janela com o metodo    
+                        abriModal(content){
+                          this.modalService.open(content);
+                        }
+                        content é um parametro obrigatório que o proprio objeto que vai ser passado pela chamada do modal ou
+                        conteudo '#content' da propria modal que é o localizador.
+
+                    3 - Colocar o metodo no botão linha 127 que é o eventBinding que vai abrir o modal <a class="btn btn-info" (click)="abrirModal(content)">
+                    <a class="btn btn-info" (click)="abrirModal(content)"> lembrar que é um link 
+                    4 - Colocar href="javascript:void(0)" para deixar o botão com aparecia de habilitado ou apagado ou sem referencia.
+                    5 - Incluido footer para o template basico exibir body e footer
+                        <div class="modal-body">
+                            info
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" value="Atualizar" class="btn btn-primary">
+                        </div>
+                    6 - Substituir a parte do body e footer pela abertura de um form primeiro
+                         <form (ngSubmit)="editarEndereco()" [formGroup]="enderecoForm">
+                            <div class="modal-body">
+
+                                <div class="alert alert-danger" *ngIf="errorsEndereco.length > 0">
+                                    <h3 id="msgRetorno">Opa! Alguma coisa não deu certo:</h3>
+                                    <ul>
+                                        <li *ngFor="let error of errorsEndereco">{{ error }}</li>
+                                    </ul>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">CEP</label>
+                                    <div>
+                                        <input class="form-control" id="cep" type="text" placeholder="CEP (requerido)" (blur)="buscarCep($event.target.value)" formControlName="cep" cep [textMask]="{mask: MASKS.cep.textMask}" [ngClass]="{'is-invalid': displayMessage.cep }" />
+                                        <span class="text-danger" *ngIf="displayMessage.cep">
+                                        <p [innerHTML]="displayMessage.cep"></p>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Logradouro</label>
+                                    <div>
+                                        <input class="form-control" id="logradouro" type="text" placeholder="Logradouro (requerido)" formControlName="logradouro" [ngClass]="{'is-invalid': displayMessage.logradouro }" />
+                                        <span class="text-danger" *ngIf="displayMessage.logradouro">
+                                        <p [innerHTML]="displayMessage.logradouro"></p>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Número</label>
+                                    <div>
+                                        <input class="form-control" id="numero" type="text" placeholder="Número (requerido)" formControlName="numero" [ngClass]="{'is-invalid': displayMessage.numero }" />
+                                        <span class="text-danger" *ngIf="displayMessage.numero">
+                                        <p [innerHTML]="displayMessage.numero"></p>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Complemento</label>
+                                    <div>
+                                        <input class="form-control" id="complemento" type="text" placeholder="Complemento" formControlName="complemento" [ngClass]="{'is-invalid': displayMessage.complemento }" />
+                                        <span class="text-danger" *ngIf="displayMessage.complemento">
+                                        <p [innerHTML]="displayMessage.complemento"></p>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Bairro</label>
+                                    <div>
+                                        <input class="form-control" id="bairro" type="text" placeholder="Bairro (requerido)" formControlName="bairro" [ngClass]="{'is-invalid': displayMessage.bairro }" />
+                                        <span class="text-danger" *ngIf="displayMessage.bairro">
+                                        <p [innerHTML]="displayMessage.bairro"></p>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Cidade</label>
+                                    <div>
+                                        <input class="form-control" id="cidade" type="text" placeholder="Cidade (requerido)" formControlName="cidade" [ngClass]="{'is-invalid': displayMessage.cidade }" />
+                                        <span class="text-danger" *ngIf="displayMessage.cidade">
+                                        <p [innerHTML]="displayMessage.cidade"></p>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Estado</label>
+                                    <div>
+                                        <select class="form-control" id="estado" formControlName="estado" [ngClass]="{ 'is-invalid': displayMessage.estado }">
+                                            <option value="">Estado</option>
+                                            <option value="AC">Acre</option>
+                                            <option value="AL">Alagoas</option>
+                                            <option value="AP">Amapá</option>
+                                            <option value="AM">Amazonas</option>
+                                            <option value="BA">Bahia</option>
+                                            <option value="CE">Ceará</option>
+                                            <option value="DF">Distrito Federal</option>
+                                            <option value="ES">Espírito Santo</option>
+                                            <option value="GO">Goiás</option>
+                                            <option value="MA">Maranhão</option>
+                                            <option value="MT">Mato Grosso</option>
+                                            <option value="MS">Mato Grosso do Sul</option>
+                                            <option value="MG">Minas Gerais</option>
+                                            <option value="PA">Pará</option>
+                                            <option value="PB">Paraíba</option>
+                                            <option value="PR">Paraná</option>
+                                            <option value="PE">Pernambuco</option>
+                                            <option value="PI">Piauí</option>
+                                            <option value="RJ">Rio de Janeiro</option>
+                                            <option value="RN">Rio Grande do Norte</option>
+                                            <option value="RS">Rio Grande do Sul</option>
+                                            <option value="RO">Rondônia</option>
+                                            <option value="RR">Roraima</option>
+                                            <option value="SC">Santa Catarina</option>
+                                            <option value="SP">São Paulo</option>
+                                            <option value="SE">Sergipe</option>
+                                            <option value="TO">Tocantins</option>
+                                          </select>
+                                        <span class="text-danger" *ngIf="displayMessage.estado">
+                                        <p [innerHTML]="displayMessage.estado"></p>
+                                    </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                    7 - Informar o formGroup enderecoForm
+                        this.enderecoForm = this.fb.group({
+                          id: '',
+                          logradouro: ['', [Validators.required]],
+                          numero: ['', [Validators.required]],
+                          complemento: [''],
+                          bairro: ['', [Validators.required]],
+                          cep: ['', [Validators.required]],
+                          cidade: ['', [Validators.required]],
+                          estado: ['', [Validators.required]],
+                          fornecedorId: ''
+                        }); 
+                    8 - Informar patchValue dentro do metodo preencherForm
+
+                        this.enderecoForm.patchValue({
+                          id: this.fornecedor.endereco.id,
+                          logradouro: this.fornecedor.endereco.logradouro,
+                          numero: this.fornecedor.endereco.numero,
+                          complemento: this.fornecedor.endereco.complemento,
+                          bairro: this.fornecedor.endereco.bairro,
+                          cep: this.fornecedor.endereco.cep,
+                          cidade: this.fornecedor.endereco.cidade,
+                          estado: this.fornecedor.endereco.estado
+                        });
+
+                        É um patchValue exclusivo porque temos dois forms um mestre e outro detalhes
+                    9 - Inclui os metodos editarEndereco() e buscarCep e preencherEnderecoConsulta para funcionar 
+                    corretamente o modal.
+
+            75.3 - Incluir metodo para atualizar endereço en fornecedorService com base na documentação do swagger da API
+                    atualizarEndereco(endereco: Endereco): Observable<Endereco> {
+                        return this.http
+                            .put(this.UrlServiceV1 + "fornecedores/endereco/" + endereco.id, endereco, super.ObterAuthHeaderJson())
+                            .pipe(
+                                map(super.extractData),
+                                catchError(super.serviceError));
+                    } 
+            
+            75.4 - Incluir os metodos para atualizar endereco no arquivo editar.component.ts
+
+                    É um put não precisa retorna nada, mas para atualizar sem piscar a tela a linha
+                    () => this.processarSucessoEndereco(this.endereco), -- que processa o sucesso buscar o metodoprocessarSucessoEndereco
+                    dentro do metodo essa linha limpa tudo this.errors = [];
+                    mostra mensagem na tela this.toastr.success('Endereço atualizado com sucesso!', 'Sucesso!');
+                    Essa linha atuliza igual ao resolve sem piscar this.fornecedor.endereco = endereco
+                    Aqui fecha o modal this.modalService.dismissAll();
+                    A tela não vai ser redirecionada pela regra do negocio apenas atualizada com os dados no grid endereço
+                    O metodo processar falha vai atribuir os erros para uma coleção de errors
+                    this.errorsEndereco = fail.error.errors;
+                    Enviar os mensagem para exibir na tela 
+                    this.toastr.error('Ocorreu um erro!', 'Opa :(');
+                    E no html vai ser exibido nessa div:
+
+                      <div class="alert alert-danger" *ngIf="errorsEndereco.length > 0">
+                         <h3 id="msgRetorno">Opa! Alguma coisa não deu certo:</h3>
+                          <ul>
+                              <li *ngFor="let error of errorsEndereco">{{ error }}</li>
+                          </ul>
+                      </div>
+
+                    editarEndereco() {
+                              if (this.enderecoForm.dirty && this.enderecoForm.valid) {
+                              
+                                this.endereco = Object.assign({}, this.endereco, this.enderecoForm.value);
+
+                                this.endereco.cep = StringUtils.somenteNumeros(this.endereco.cep);
+                                this.endereco.fornecedorId = this.fornecedor.id;
+
+                                this.fornecedorService.atualizarEndereco(this.endereco)
+                                  .subscribe(
+                                    () => this.processarSucessoEndereco(this.endereco),
+                                    falha => { this.processarFalhaEndereco(falha) }
+                                  );
+                              }
+                            }
+
+                            processarSucessoEndereco(endereco: Endereco) {
+                              this.errors = [];
+
+                              this.toastr.success('Endereço atualizado com sucesso!', 'Sucesso!');
+                              this.fornecedor.endereco = endereco
+                              this.modalService.dismissAll();
+                            }
+
+                            processarFalhaEndereco(fail: any) {
+                              this.errorsEndereco = fail.error.errors;
+                              this.toastr.error('Ocorreu um erro!', 'Opa :(');
+                            }
+
+            75.5 - Formatando dados com pipe
+                    Como ja esta injetado os componeentes na tela:
+                    import { utilsBr } from 'js-brasil';
+                    E as mascara configuradas aqui MASKS = utilsBr.MASKS;
+
+                    basta incluir no html o pipe '|' e depois o mascara do cep 
+                     {{ fornecedor.endereco.cep | cep }}
+
+                     cep fica no arquivo pipe.d.ts
+
+            75.6 - Implementar o metodo atualizar fornecedor
+                    alterar no arquivo fornecedorService de :
+
+                    atualizarFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
+                         return new Observable<Fornecedor>();
+                     }
+
+                     para:
+
+                     atualizarFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
+                        return this.http
+                            .put(this.UrlServiceV1 + "fornecedores/" + fornecedor.id, fornecedor, super.ObterAuthHeaderJson())
+                            .pipe(
+                                map(super.extractData),
+                                catchError(super.serviceError));
+                    }
+
+                    extractData para retornar positivo ou sucesso
+
+                    editarFornecedor() arquivo editar.component
+                    Essa linha manipula documento
+                    this.fornecedor = Object.assign({}, this.fornecedor, this.fornecedorForm.value);
+                    Essa permite somente numeros
+                    this.fornecedor.documento = StringUtils.somenteNumeros(this.fornecedor.documento);
+                    Essa chama o metodo
+                    this.fornecedorService.atualizarFornecedor(this.fornecedor)
+            75.7 - Gerou erro de conversão do tipoFornecedor de string para number no html o valor do checbox é "1" e "2" 
+                   "" entre aspa indioca que é um tipo string e a pagina gerava erro na inclusão e alteração porque a tabela 
+                   e o entity estava esperando um tipo number ou int.
+                   Para resover foi adicionado as linhas para tranformar em number a valor string
+                   if(this.tipoFornecedorForm().value == "2"){
+                      this.fornecedor.tipoFornecedor = 2;
+                    }else{
+                      this.fornecedor.tipoFornecedor = 1;
+                    }
+
+                    Obs:: Quando foi implementado o o metodo preencherForm a linha tipoFornecedor: this.fornecedor.tipoFornecedor.toString()
+                        sem o toString() da um erro e não mostra nada no F12 do browser.
+
+
+        76 - Spinner de carregamento de tela 
+            Explicação a figura que fica girando  enquanto a tela é renderizada
+
+            76.1 -  Vamos intalar o ngxSpinner npm i ngx-spinner
+            76.2 -  Pega na pagina de documentação https://www.npmjs.com/package/ngx-spinner a referencia e o module
+                    incluir apenas no FornecedorModule para funcionar apenas nessa parte 
+                    NgxSpinnerModule - import { NgxSpinnerModule } from "ngx-spinner";
+            76.3 - Injertar o servico private spinner: NgxSpinnerService no construtor da pagina editar.component.ts
+            76.4 - No OnInit inciar o spinner this.spinner.show();
+            76.5 - Dentro do OnInit depois de carregar o formulario incluir o comando para esconder o spinner com 
+                delay porque como é maquina local vai renderizar a pagina muito rapido e não vai mostrar o efeito do spinner.
+                setTimeout(() => {
+                  /** spinner ends after 5 seconds */
+                  this.spinner.hide();
+                }, 5000);
+
+                Tudo tem o exemplo no site 
+
+            76.6 - Incluir o codigo html copiado do exemplo da documentação em qualquer parte da tela
+                <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner> 
+
+            Funcionou OK                                                                                                                                                      
+
+
+        77 - Exibição de mapas Google mapas
+             
+             objetivo: Mostrar um mapa simples passando os dados do endereço
+
+             77.1 - Criei uma API Key no google "AIzaSyBvtAhULexhzeBoOcRDmoH-sra7ATskmhc" passo a passo aqui https://maplink.global/blog/como-obter-chave-api-google-maps/
+
+             77.2 - No arquivo DetalhesComponent criar a propriedade publica  enderecoMap do tipo any que vai representar o  mapa
+
+             77.3 - Criado o metodo EnderoCompleto para ter o mapa 
+
+                public enderoCompleto(): string{
+                    return this.fornecedor.endereco.logradouro + "," + this.fornecedor.endereco.numero + "-" + this.fornecedor.endereco.bairro + "," + this.fornecedor.endereco.cidade + "-" + this.fornecedor.endereco.estado;
+                }
+
+            77.4 - Agora vamos meu this.enderecoMap colocado dentro do contrutor vai ser igual a url do google
+
+                 this.enderecoMap = "https://www.google.com/maps/embed/v1/place?q";  ?q é de query
+
+                 concatenar a query com o metodo enderoCompleto mais a chave do google criada
+
+                 this.enderecoMap = "https://www.google.com/maps/embed/v1/place?q" + this.EnderecoCompleto + "AIzaSyDoLnFZQXh72drMRsb7U_kQvqHrMYQxfNM" API cadastrada e configurada no google "Maps Embed API"
+
+            77.5 - Colocar o código html para mostrar o mapa
+                     <div class="row">
+                         <br>
+                         <iframe width="100%" height="450" frameBorder="0" style="border: 0; padding-bottom: 50px;"[src]="enderecoMap" allowfullscreen></iframe>
+                     </div>
+
+                     [src]="enderecoMap" é o endereço map que é a propriedade
+
+            77.6 - Vai dar erro porque vai detectar que a ural do google é insegura pra usar ou amigavel o angular tem proteção
+
+                    Vamos sanitizar esses problemas usando a classe injetada no constructor DomSanitizer "private sanitizer: DomSanitizer"
+
+                    Vamos alterar o conteudo da propriedade enderecoMap de:
+
+                    this.enderecoMap = "https://www.google.com/maps/embed/v1/place?q" + this.EnderecoCompleto+ "AIzaSyBvtAhULexhzeBoOcRDmoH-sra7ATskmhc";
+
+
+                    para:
+
+                    this.enderecoMap = this.sanitizer.bypassSecurityTrustResourceUrl ("https://www.google.com/maps/embed/v1/place?q" + this.EnderecoCompleto+ "AIzaSyBvtAhULexhzeBoOcRDmoH-sra7ATskmhc");
+
+                    this.sanitizer.bypassSecurityTrustResourceUrl é um metodo para iframe, tem pra css. É uma brecha na segurança mas eu confio no google maps
+                    bypassSecurityTrustResourceUrl é uma resoucer uma fonte de algum recurso
+
+                    Aqui estamos dando um Bypass mas eu confio no google
+
+            77.7 - Para formatar o cof/cnpj vamos usar uma condição com if ternario alterar a linha do html
+
+                    de:
+                        {{ fornecedor.documento }}
+                    para:
+                        {{ fornecedor.tipoFornecedor === 1 ? (fornecedor.documento | cpf) : (fornecedor.documento | cnpj)  }}                    
+
+                    Obs: se o endereço estiver incorreto não vai mostrar corretamente o mapa
+
+        78 - Exclusão de fornecedor
+
+            78.1 - Repeti os passos do item 77 para mostra o mapa na tela
+            78.2 - Alterado o metodo excluirEvento()
+                    de:
+                        evento => { this.sucessoExclusao(evento) },
+                        error => { this.falha() } 
+                    para:
+                        fornecedor => { this.sucessoExclusao(fornecedor) },
+                        error => { this.falha() }
+
+            78.3 - Alterado o código no arquivo fornecedorService Metodo excluir
+
+                    de :
+                         excluirFornecedor(id: string): Observable<Fornecedor> {
+                         //return new Observable<Fornecedor>();
+
+                        }   
+
+                    Para:
+                         excluirFornecedor(id: string): Observable<Fornecedor> {
+                            return this.http
+                                 .delete(this.UrlServiceV1 + "fornecedores/" + id, super.ObterAuthHeaderJson())
+                                 .pipe(
+                                     map(super.extractData),
+                                     catchError(super.serviceError));
+                             }     
+
+                Testado funcionou corretamente .
+
+        79 -  Interceptando erros do servidor 401 e 403
+            Explicação: Até aqui quando não estou logado a tela de consulta de fornecedores permite ver todos os fornecedores
+                ao clicar no botão editar estou mandando uma consulta para o componente passado o header de autenticação e como
+                não esotu logado ele retorna erro de não autorizado 'Unaithorized'.O erro 401 é eu não sei quem você é e não
+                pode fazer isso. O erro 403 é , eu sei quem você mas você não pode fazer isso.
+
+            79.1 - Como é um tratamento global vamos criar um arquivo na pasta services sub da pasta app com nome de 
+                    import { Injectable } from "@angular/core";
+
+                    @Injectable()
+                    export class ErrorInteceptor{
+                    
+                    }
+            79.2 - Já que vou interceptar erros vamo implementar a interface HttInterceptor que faz parte do pacote HttpClient do 
+                    proprio Angular.
+
+                    export class ErrorInteceptor implements HttpInterceptor{
+                        intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+                            throw new Error("Method not implemented.");
+                        }
+
+                    }
+            
+            79.3 - intercept que metodo é esse?
+
+                    req - Que é uma requisição 'HttpRequest' 
+                    next - Que é um HttpHandler que vai chamar a proxima ação
+                    Observable - Que é um evento Http no caso de qualquer tipo de dado <HttpEvent<any>> nesse caso
+                    OK intercept pode fazer entre outras coisas capturar o request e colocar token em todos os request
+                    senhaConfirm usar o metodo do BaseService  ObterAuthHeaderJson() que faz isso nesse projeto.
+                    Mas o foco aqui é tratar o erro 401 não autorizado e 403 Acesso negado.
+
+                    Vamos criar a linha que retorna o erro .
+
+                    return next.handle(req) - Vamo dar um next manipulando 'handle' as requisição 'req' quando tiver erro
+                        
+                    Pra isso é preciso import o throwError na biblioteca rxjs e o catchError na rxjs/operator .
+                    import { Observable,throwError } from "rxjs"
+                    import { catchError } from "rxjs/operators";
+
+
+                    return next.handle(req).pipe - fazer a escala com pipe
+
+                    E no pipe vamos colocar o catchError para capturar o erro
+                        return next.handle(req).pipe(
+                                catchError()
+                            )
+                    Que vai para a estrutura do metodo que eu vou montar.
+
+                        error = >{}
+                         catchError(error => {}); 
+
+                    Injetar o router no construtor - constructor(private router:Router){}
+
+                    Se for uma instancia de erro do Http trata o codigo do erro 401 e 403 senão trata como erro genericos
+
+                     if( error instanceof HttpErrorResponse){
+                         if(error.status===401){
+                             this.localStorageUtil.limparDadosLocaisUsuario();
+                              this.router.navigate(['/conta/login']);
+                         };
+                         if(error.status===403){
+                             this.router.navigate(['/acesso-negado']);
+                         };                  
+                     }
+                     return throwError(error);
+
+                     Codigo tratado ou ele faz login ou recebe um erro de acesso negado
+
+            79.4 - Em seguida o que fazer com o intercept? vamos tratar e configurar para ele ficar ativo em toda a aplicação.
+                79.4.1 - No modulo principal app.module.ta na pasta raiz app importar HTTP_INTERCEPTORS E HttpClientModule   
+                        import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+                        HTTP_INTERCEPTORS que na verdade é um alias httpinjectorToken
+                79.4.2 - Configurar HttpClientModule
+                        imports: [
+                                  BrowserModule,
+                                  NavegacaoModule,
+                                  AppRoutingModule,
+                                  NgbModule,
+                                  FormsModule,
+                                  BrowserAnimationsModule, 
+                                  ToastrModule.forRoot() ,
+                                  HttpClientModule
+                                ],
+                79.4.3 - Criar uma configuração declarations  uma constate antes do @NgModule
+                        export const httpInterceptorProviders = [
+                            { provide: HTTP_INTERCEPTORS, useClass: ErrorInteceptor,multi:true }
+                        ]
+
+                        explicação: Estou provendo 'provide: HTTP_INTERCEPTORS' e usando ele atraves da classe ErrorInteceptor.
+                        isso é uma injeção de dependencia.
+                        Estamos fazendo um injeção de dependencia para quando for trabalhar com intercept eu passar a responsabilidade
+                        para a classe ErrorInteceptor
+
+                        E registrar a constate no Providers httpInterceptorProviders
+                        Vai gerar erro e a solução é retirar o HttpClientModule do modulo local do fornecedor.module
+                        de:
+                             ReactiveFormsModule
+                             HttpClientModule,
+                             NgBrazil,
+                        para:
+                             ReactiveFormsModule
+                             NgBrazil,
+
+                        Conclusão sem estar logado e clicar na opção do menu fornecedores vai mostrar a lista e quando criar no botão
+                        para editar e apagar vai retornar para tela de login. Porque gera erro 401 'não autorizado no response da API'
+
+                        Dica para ver o token valido ir no site jwt.io
+
+                        Para validar o erro 403 ir na tabela AspNetUserClaims que tem as permissoes e retirar do login Atualizar,Excluir da coluna 
+                        ClainValue. Se funcionar corretamente vai mostrar erro 404 ao mudar algum item na tela de edição e clicar no botão editar
+                        porque não existe tela e tratamento para 403 na rota de navegação na subpasta navegacao.
+                        
+                        Criar a pasta acesso-negado na subpasta navegação 
+                        Criar os arquivos acesso-negado.component.html e acesso-negado.component.ts somente para mostrar a mensagem correta
+                        Vamos criar uma rota para redirecionar para o component AcessonegadoComponent 
+                        No arquivo app.routing.module pasta base app vamos incluir a linha { path: 'acesso-negado', component: AcessoNegadoComponent},
+                        No arquivo navegacao.module pasta navegacao vamos incluir a linha com o nome do componente AcessoNegadoComponent no
+                        declarations: e exports:.
+
+                        Tudo funconando corretamente vai mostrar os dados e ao clicar nos botão editar e excluir vai ser redirecionado para tela acesso negado.
+                        O proximo item vai esconder as tela quando o login não tiver acesso.
+
+
+        80 - Permissão e restrição de acessos
+
+            80.1  - Na pasta fornecedores subpasta service criar o arquivo fornecedor.guard.ts para as funcionalidade
+                    de fornecedor apenas.
+
+                    @Injectable()
+                    export class FornecedorGuard{
+                        
+                    }
+            
+            80.2 - Implementar a interface implements CanActivate com um returno true ou false
+
+                    export class FornecedorGuard implements CanActivate{
+
+                        canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+
+
+                            return true;
+                        }
+
+                    }
+
+            80.3 - Incluir a constate do storage e construtor com a variavel de rota
+                    
+                    localStorageUtil=  new LocalStorageUtils();
+                    constructor(private router:Router){}
+            
+            80.4 - Primeiro passo para o usuario acessar uma area quando esta logado se acessar API
+                    Implementar o codigo:
+
+                    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    
+                        if(this.localStorageUtil.obterTokenUsuario()){
+                             this.router.navigate(['/conta/login']);
+                        };
+
+                        return true;
+                    }
+
+                    No arquivo fornecedor.route.ts na subpasta services dentro da pasta fornecedor incluir
+                    na rota adicionar-novo a linha com o guarda de rota para não mostrar a tela de adicionar
+                    path: 'adicionar-novo', component: NovoComponent,
+                    canActivate:[FornecedorGuard] 
+                    Registrar o serviço FornecedorGuard no modulo fornecedor.module.ts em providers: para executar a função 
+                    corretamente se gerar erro. O desvio vai para a tela de login e desloga o usuario.
+
+                    providers: [
+                      FornecedorService,
+                      FornecedorResolve,
+                      FornecedorGuard
+                    ]
+                    })
+
+            80.5 - Nesse ponto se o usuario tiver a  opção de adicionar em outra tabela como nesse caso produtos
+                vai permitir acesso a incluir novo fornecedor, para evitar esse erros temos de implementar mais 
+                bloqueios no arquivo FornecedorGuard
+
+                80.5.1 - Vamos usar o resolve que cria um dado disponivel para rota do arquivo fornecedor.route
+
+                        Colocar as estrutura que vou chamar de claim 'que é um objeto local não do banco' e incluir os dados dentro 
+                        do data do response da API.Essa claim é um objeto tipo chave valor:
+                         data:[{claim:{ nome:'Fornecedor', valor:'Adicionar' }}]
+                         O nome da minha chave é Fornecedor e o valor é Adicionar.Pra quem quiser passar nesse rota vou ter de passar
+                         pelo tipo de dado 'Fornecedor' e o valor que eu quero 'Adicionar'.
+                
+                80.5.2 - Eu quero saber se o usuario tem dados no arquivo FornecedorGuard vamos buscar essas informação no codigo:
+
+                        Esta logado ?
+
+                        if(!this.localStorageUtils.obterTokenUsuario()){
+                             this.router.navigate(['/conta/login']);
+                        };
+                        
+                        Obter usuario e rotas:
+
+                        let user = this.localStorageUtils.obterUsuario();
+                        let claim: any = routeAc.data[0]; data é o objeto so http que tem o array
+
+                        A rota tem dados:
+
+                        if(claim!== undefined){
+                        
+                        Tem dados pegar o objeto claim:
+
+                        let claim: any = routeAc.data[0]['claim'];
+
+                        if(claim){
+
+                        Usuario possi claims:
+
+                        if(!user.claims){
+                            this.navegarAcessoNegado();
+                        }
+
+                        Ele possui uma claim com base no nome da rota:
+
+                         let userClaims =  user.claims.find(x => x.type === claim.nome);
+                         if (!userClaims) {
+                             this.navegarAcessoNegado();
+                         }
+
+                        Converte o valores para string
+
+                         let valoresClaim = userClaims.value as string;
+
+                        Ele possui o valor Adicionar dentro da claim de fornecedor
+
+                        if (!valoresClaim.includes(claim.valor)) {
+                            this.navegarAcessoNegado();
+                         }
+
+                        includes - igual in('Adicionar','Atualizar','Excluir')
+
+                        deixa passar :
+
+                         return true;
+                
+                80.5.3 - Incluido as linhas com os codigos no arquivo fornecedor.route.ts
+
+                        Na rota editar antes do resolver
+                         canActivate:[FornecedorGuard],
+                         data:[{claim:{ nome:'Fornecedor', valor:'Atualizar' }}],
+
+                        Na rota excluir antes do resolver
+                        canActivate:[FornecedorGuard],
+                        data:[{claim:{ nome:'Fornecedor', valor:'Excluir' }}],
+
+                81 - Finalizando o CRUD de fornecedor
+
+                    81.1 - Foi incluido no arquivo lista.component.html a formatação para cpf e cnpj
+
+                             {{ fornecedor.tipoFornecedor === 1 ? (fornecedor.documento | cpf) : (fornecedor.documento | cnpj)  }}
+                    
+                    81.2 - Incluido um guarda de rota para mostrar uma mensagem quando iniciar o cadastro de fornecedor
+                            e abandonar o formulario se finalizar.
+
+                    81.3 - Herdado a class CanDeactivate no arquivo FornecedorGuard
+
+                            export class FornecedorGuard implements CanActivate,CanDeactivate<NovoComponent>
+
+                    81.4 - E implementado o metodo que retorna uma mensagem javascript window.confirm
+
+                         CanDeactivate(component: NovoComponent){
+                             if(component.mudancasNaoSalvas){
+                                 
+                                 return windows.confirm('Tem certeza que deseja abandonar o preenchimento do formulario?');
+                             }
+                         }
+
+                     81.5 - Incluir a Linha canDeactivate: [FornecedorGuard], que vai desviar para o guarda de rota no arquivo fornecedor.route
+
+                            path: 'adicionar-novo', component: NovoComponent,
+                            canDeactivate: [FornecedorGuard],
+                            canActivate:[FornecedorGuard],
+                            data:[{claim:{ nome:'Fornecedor', valor:'Adicionar' }}]
+
+                    81.6 - Incluido a linha this.mudancasNaoSalvas = false; no processarSucesso do arquivo NovoComponent
+                        para não mostrar a mensagem depois de incluido com sucesso
+                     
+                82 - Cadastro de produtos
+
+                        Apenas foi incluido todo codigo fonte template basico disponibilizado pelo curso 
+                        com as telas prontas e somente as implmentações novas serão estudadas.
+
+                83 - Upload de imagens
+
+                        Com fazer upload e entender os conceitos
+                        Quem esta fazendo o upload da image é a API.
+                        Para fazer upload da imagem tem de transformar em base64 e transforma em byte array 
+                        salvar no diretorio wwwroot mas pode ser em qualquer um e não é a melhor pratica.
+                        A pagina só fornece o stream de dados em base64, mas quem pega esse stream e converte para
+                        arquivo é a API metodo UploadArquivo da ProdutosController.cs
+                        A melhor pratica é não utilizar o diretório da pagina do Angular ou da API para salvar as imagens
+                        por causa da escalabilidade, se o angular for publicado em varios servidores onde vai ser colocado a imagem correta?
+                        Então é melhor colocar num cdn ou blob do azure ou servidor de arquivo fixo na rede.
+
+                    
+                    83.1 - Primeiro na API tem dois campos um que passa o nome do arquivo Image e o strem de dados base64 ImageUpload que é comumn fazer
+                        em qualquer backend
+
+                    83.2 - Vamos utilizar o componente ngx-image-cropper que faz upload de imagem mais populares do angular.
+                            do endereço https://www.npmjs.com/package/ngx-image-cropper
+                    
+                    83.3 - Vamos instalar como o comando npm i ngx-image-cropper
+
+                    83.4 - Adiciona-lo ao module array imports no caso do produto.module para usar apenas localmente
+
+                    83.5 - Colocar esse gatilho do tipo chance no imput tipo file  <input type="file" (change)="fileChangeEvent($event)" />
+
+                    83.6 - E usar o componente crooper para alterar a imagem 
+                            <image-cropper
+                                [imageChangedEvent]="imageChangedEvent"
+                                [maintainAspectRatio]="true"
+                                [aspectRatio]="4 / 3"
+                                format="png"
+                                (imageCropped)="imageCropped($event)"
+                                (imageLoaded)="imageLoaded()"
+                                (cropperReady)="cropperReady()"
+                                (loadImageFailed)="loadImageFailed()"
+                            ></image-cropper>
+                    
+                    83.7 - No meu componente adicionar a referencia e os metodos para cada tipo de ação:
+
+                            import { ImageCroppedEvent } from 'ngx-image-cropper';
+
+                            fileChangeEvent(event: any): void {
+                                this.imageChangedEvent = event;
+                            }
+                            imageCropped(event: ImageCroppedEvent) {
+                                this.croppedImage = event.base64;
+                            }
+                            imageLoaded(image: LoadedImage) {
+                                // show cropper
+                            }
+                            cropperReady() {
+                                // cropper ready
+                            }
+                            loadImageFailed() {
+                                // show message
+                            }
+
+                    83.8 - Incluir a referencia no arquivo novo.component da pasta produto
+
+                            import { ImageCroppedEvent,ImageTransform,Dimensions } from 'ngx-image-cropper';
+
+                            Para trabalhar e modificar varios aspectos da imagem como recorta redimensionar etc..
+
+                    83.9 - Adcionar as seguintes propriedades obrigatorias do componente cropper
+
+                            imageChangedEvent: any = '';
+                            croppedImage: any = '';
+                            canvasRotation = 0;
+                            rotation = 0;
+                            scale = 1;
+                            showCropper = false;
+                            ContainWithinAspectRatio = false;
+                            transform: ImageTransform ={}; //isso é uma classe
+                            imageUrl: string;
+                            imagemNome: string;
+
+                    83.10 Adicionado os metodos eventos depois do metodo processarFalha
+
+                        Esse evento vai  pegar o event que vem no parametro e associar a propriedade local
+                        this.imageChangeEvent quando escolher uma imagem.
+                        E vai pegar o primeiro nome do array do evento alvo corrente.
+                        fileChangeEvent(event: any): void {
+                          this.imageChangedEvent = event;
+                          this.imagemNome = event.currentTarget.files[0].name;
+                        }
+
+                        Aqui vai receber a imagem recortada para exibir no browser
+                        imageCropped(event: ImageCroppedEvent) {
+                            this.croppedImage = event.base64;
+                        }
+
+                        Se a imagem foi recortada exibir o cropper 'tosquiador ou pode ser imagem cortada '
+                        imageLoaded() {
+                            this.croppedImage = true;
+                        }
+                        cropperReady(sourceImageDimesions: Dimensions) {
+                            console.log('Crooper ready', sourceImageDimesions)
+                        }
+
+                        Aqui inclui na lista de erros a mensagem
+                        loadImageFailed() {
+                            this.errors.push('O formato do arquivo'+ this.imagemNome+ 'não é aceito');
+                        }
+
+                    83.11 - Incluido as linhas no arquivo novo.component.html na div que exibi imagem depois
+                        da  <div class="custom-file"><div>
+
+                        A primeira chama todo os eventos do componente e a segunda exibi na tela lado a lado na mesma linha
+                        pois está dentro da class="row"
+
+                        <div *ngIf='imagemNome' class="row">
+                            <div class="col col-md-6">
+                                <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="false" [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 3" [resizeToWidth]="256" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false"
+                                    [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'left'" [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
+                                    (loadImageFailed)="loadImageFailed()"></image-cropper>
+                            </div>
+                            <div class="col col-md-6">
+                                <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+                            </div>
+                        </div>
+
+                    83.12 - Lembrando que onde chama o file div <div class="custom-file"> vai precisar coloca o evento chance
+
+                        Alterar o imput de :
+                        <input type="file" class="custom-file-input" id="imagem" formControlName="imagem"  [ngClass]="{'is-invalid': displayMessage.imagem }">
+
+                        para:
+
+                        <input type="file" class="custom-file-input" id="imagem" formControlName="imagem" (chance)="fileChangeEvent($event)" [ngClass]="{'is-invalid': displayMessage.imagem }">
+
+                        que vai habilitar a exibição do cropper.
+
+                        
+                84 - Dominando o image cropper
+
+                    84.1 - Para retirar o espaço entre a div <div class="custom-file"> e <div class="row">                                 
+
+                        Foi adicionado o comando <div *ngIf='imagemNome' class="row"> para só exibir a div quando subir a imagem
+                        Adicionado a linha para mostrar o nome da imagem <span *ngIf='imagemNome'><br>{{ imagemNome }}<br></span>
+                    
+                    84.2 - Para retirar o cabeçalho da base64 que é adicionado quando recorta-mos a imagem foi adicionado a linha
+
+                         this.produto.imagemUpload = this.croppedImage.split(',')[1];
+                         this.produto.imagem = this.imagemNome;
+
+                         Que faz o split e paga somente o segundo item do array.
+                    
+                    84.3 - Ao clicar no botão cadastrar vai da um problema de conversão do valor decimal porque esta recebendo
+                            uma string no codigo do metodo adicionarProduto
+
+                            this.formResult = JSON.stringify(this.produto);
+                            Para corrigir foi incluido a linha antes do this.formResult
+                            this.produto.valor = CurrencyUtils.StringParaDecimal(this.produto.valor);
+
+                            E incluido a class CurrencyUtils  na pasta utils.
+                    
+                    84.5 - Para mostrar os tipos de imagem no upload foi adicionado o comando acept a linha:
+                         <input type="file" class="custom-file-input" id="imagem" accept="image/jpeg,image/png" formControlName="imagem" (change)="fileChangeEvent($event)"  [ngClass]="{'is-invalid': displayMessage.imagem }">
+
+                    84.6 - Lembrando que <form enctype="multipart/form-data" na linha <form enctype="multipart/form-data" (ngSubmit)="adicionarProduto()" [formGroup]="produtoForm">
+                        esta transformando em dados binarios nem sempre é importante depende da api, mas o comum é isso.
+
+                85 - Configurando o caminho das imagens
+
+                    85.1 - Nos arquivo de configuração do ambiente de Prod e Desenv environment.prod.ts, environment.ts pasta environment
+                            foi adicionado a linha com o caminho no servidor API 'Melhor usar um servidor de arquivos' onde os arquivos serão guardados:
+
+                     imagensUrl: 'https://localhost:5001/'
+
+                    85.2 - Em cada arquivo .ts onde a figura tem de ser mostrada foi criado a propriedade :
+
+                          imagens: string =environment.imagensUrl;
+
+                          Que pega o caminho do arquivo de configuração de ambiente
+
+                    85.3 - E no arquivo html foi adiciona <img src="{{ imagens }} onde o arquivo será exibido
+
+                        <img src="{{ imagens }}{{ produto.imagem }}" style="width: 70px; height: 100px">
+
+                    Até aqui tudo funcionou corretamente .                                                                                                 
+                        
+                86 - Forma alternativa de upload de arquivos
+
+                    Objetivo: Mostrar forma alternativa de importar imagem ou arquivos como .produtoForm
+
+                    86.1 - No arquivo html editar.component na tag input type="file" vamos manipula-lo
+                        86.1.0 - Incluir a propriedade accept para trabalhar com jpeg e png
+                            accept="image/jpeg,image/png"
+                        86.1.1 - Onde temos a validação vamos incluir o template com cerquilha que o angular entende esse componente
+                                no caso um objeto de formulario , esse tipo de template ajuda o angular a identificar fazendo referencia
+                                ao input , porque no evento change vamos chamar o metodo upload referenciando o fileinput e falando dos arquivos 
+                                que estou selecionando para upload.
+
+                                #fileInput (change) ="upload(fileInput.file)"
+
+                                não estou passando evento upload e sim os dados da caixa nesse input.
+                        
+                    86.2 - Vamos declarar no componente tres propriedades que vou precisar.
+
+                            imageBase64: any;
+                            imagePreview: any;
+                            imageNome: any;
+
+                            São do tipo Any para deixar de forma generica para trabalhar com outro tipo de arquivo
+
+                    86.3 - Implementar o metodo upload
+                          metodo que vai ser chamado no (change) do html do nosso controle
+                          que vai receber o fileInput.files
+                          Esse metodos são padroes da propria doc do angular que possibilita pegar um arquivo fazer a serialização
+                          e mandar para uma API.
+
+                           upload(file: any) {
+                              this.imageNome = file[0].name; // pegar a posição zero e guardar o nome
+                              var reader = new FileReader();//Vamos precisar do fileReader que vai ler do controle e transfomar em base64
+                              reader.onload = this.manipularReader.bind(this); // Esse evento chama o metodo que vou passar por fora para manipular o reader
+                              reader.readAsBinaryString(file[0]);
+                            }
+
+                            manipularReader(readerEvt: any){
+                              var binaryString = readerEvt = readerEvt.target.result; //Convert de binary para string
+                              this.imageBase64 = btoa(binaryString);// reverter para base64 que vai mandar para API
+                              this.imagePreview = "data:image/jpeg;base64, " + this.imageBase64; //Adiciona o header da imagem mais a base64 para exibir a imagem que estou fazendo upload, caso não for imagem tirar o header
+
+                            }
+
+
+
+
+                           
+                           
+                           
+                           
+
+                           
+                           
+                           
+                           
+
+
+                            }
+                        
+                    86.4 - Vamos colocar no html o codigo para mostrar a imagem atual e a imagem imagePreview
+
+                    86.5 - Incluido a linha que seta o parametro incluido no arquivo environment.ts para pasta da imagem
+
+                        imagens: string = environment.imagensUrl;
+   
+                        
+                    86.6 - A imagem: [''], não é obrigatoria porque não tem nenhum validator como saber se exite uma nova imagem 
+                            ao editar o produto, vamos colocar o codigo abaixo para fazer uma validação dentro so metodo editarProduto
+
+                            if(this.imageBase64){
+                                this.produto.imagemUpload = this.imageBase64;
+                                this.produto.imagem = this.imagemNome
+                            }
+
+                    86.7 - Vamos tratar o valor para transforma de string para decimal
+
+                            this.produto.valor = CurrencyUtils.StringParaDecimal(this.produto.valor);
+
+                             e incluir a linha no patchValue para ajustar a exibição quando selecionar no grid de consulta,
+                             senao mostra com a formatação errada
+
+                             valor: CurrencyUtils.StringParaDecimal(this.produto.valor)
+
+                   86.8 - No momento que faz o submit clicando no botão editar a imagem some para corrigir vamos fazer:
+
+                            criar a propriedade
+
+                            imagemOriginalSrc: string;
+
+                            E no ngOnInit adicionar a linha
+                            this.imagemOriginalSrc = this.imagens + this.produto.imagem;
+
+                            E substituir a linha do html
+
+                             <img src="{{ imagens }}{{ produto.imagem }}" style =" width: 70px; height: 100px">
+
+                             para
+
+                              <img [src]="imagemOriginalSrc" style =" width: 70px; height: 100px">
+
+                              Explicação:quando tem um item dinamico a property bind não consegue manter o estado do componente que tem a imagem
+                              quando ele esta usando um src="{{ imagens }}{{ produto.imagem }}" source dinamico porem ele não é uma propriedade gerenciada
+                              do angular com os colchetes em volta [src]
+
+                87 - Exibindo os produtos de um fornecedor
+
+                    Objetivo: Exibir a lista de fornecedores e produtos
+
+                    87.1 - Criar uma nova subpasta dentro da pasta de fornecedores chamada produtos
+                    
+                    87.2 - Criar dentro da pasta os arquivos lista-produtos.component.html e .ts que serão um subcomponente
+
+                    87.3 - Criar o codigo no arquivo lista-produtos.component.ts
+
+                            import { Component, Input } from '@angular/core';
+                            import { Produto } from 'src/app/produto/models/produto';
+                            import { environment } from 'src/environments/environment';
+
+
+
+                            @Component({
+                              selector: 'lista-produto',
+                              templateUrl: './lista-produtos.component.html'
+                            })
+                            export class ListaProdutosComponent {
+                            
+                                imagens: string = environment.imagensUrl; -- Pega o caminho da imagem do arquivo environment
+
+                                @Input() -- Faz a ligação que busca os dados do component produtoForm, alimenta meu componente atraves do @Input
+                                produto: Produto[]; -- cria a variavel produto e popula com o array, pelo @Input significa que vou receber uma lista de produto do modulo produto
+
+                                Obs: Um component não pode estar registrado em dois modulos ao mesmo tempo, só que Produto[] é uma interface "export interface Produto" então pode
+                                ser reaproveitada em qualquer lugar.Por mais que faça parte de outro modulo,a outra solução é duplicar o arquivo
+
+                            }
+
+                    87.4 - Para criar o codigo html foi copiado e colado da pagina lista.component.html da pasta produto com ajuste no html.
+
+                    87.5 - Registrar ListaProdutosComponent no modulo fornecedor.module.ts
+
+                    87.6 - Vamos criar uma referencia dentro da model de fornecedor 
+                           produtos: Produto[]
+
+                           Explicação a API retorna a lista de fornecedor + lista de produto, senão fosse isso não dava pra implementar esse código
+
+                    87.7 - No codigo html depois da lista de endereço linha 138 vamos inclui a pesquisa de produtos com a linha:
+
+                             <lista-produto [produtos]="fornecedor.produtos"></lista-produto>
+
+                             lista-produto - nome do componente
+                             [produtos] - Aqui é o input que foi dado o nome produtos no arquivo lista-produtos.Component.ts 
+
+                             fornecedor.produtos - é a model fornecedor objeto produtos.
+
+                    87.8 - Incluido a linha na tela de exibir fornecedor
+
+                             <lista-produto [produtos]="fornecedor.produtos"></lista-produto>
+
+                    Finalizado o cadastro de fornecedores e produtos testes aqui ok tudo funcionando .
+                        
+                88 - Implementando a ReturnUrl após login
+
+                    Explicação: Nesse momento quando clico na opção do menu de fornecedores ou produtos, é mostrado a lista
+                                desses itens. Ao escolhar editar ou visualizar como não estou logado vai dar um erro 401 da api
+                                e retorna para tela de login. Se fazer o login vai ser direcionado para tela de home, a intenção
+                                é implementar o código para após o login a rota ir para ultima url nesse caso de fornecedor ou produto.
+
+                    88.1 - Inclui o codigo na pasta global de service arquivo error.handler.service.ts alterar a linha de:
+
+                            this.router.navigate(['/conta/login']);
+
+                            para:
+
+                            this.router.navigate(['/conta/login'],{ queryParams: { returnUrl: this.router.url }});
+
+                            O router da acesso a algumas questões de rota , aqui this.router.navigate(['/conta/login'] preciso passar
+                            um parametro que é a minha returnUrl mais o dado da ura pra onde vou ter de voltar depois. Quando eu não tenho
+                            um parametro não declarado como em produto/editar?id=1 temos que pesquisar ele atraves do queryParams que é uma
+                            coleção que a propria rota tem. O this.router.url é a url atual.
+
+                    88.2 - No arquivo login.component.ts declarar a variavél returnUrl: string;
+
+                    88.3 - Injetar no constructor  private route: ActivatedRoute para pegar o parametro da query que pega a rota ativa
+
+                    88.4 - Com ActivatedRoute eu consigo pegar qualquer informação que tiver na  rota 
+
+                    88.5 - Incluir a linha que popular o retorna da rota dentro do construtor
+                            this.returnUrl = this.route.snapshot.queryParams['returnUrl'];
+
+                            Essa linha petga o snapshot 'igles instantaneo' ou seja o que estiver na rota ou não nesse momento
+                            e faça uma query nesses parametros queryParams com base nessa informação s['returnUrl'] ver se Notificações
+                            tem nenhum parametro nessa rota com esse nome.
+
+                    88.6 - E na validação do toast no metodo processarSucesso incluir a validação ternaria alterado a linha de:
+
+                            if(toast){
+                                toast.onHidden.subscribe(()=>
+                                {
+                                 this.router.navigate(['/home']);
+                                }
+                            para:
+
+                                if(toast){
+                                    toast.onHidden.subscribe(()=>
+                                    {
+                                      this.returnUrl
+                                      ? this.router.navigate([this.returnUrl])
+                                      : this.router.navigate(['/home']);
+                                    }
+                            
+                    88.7 - Ao clicar no menu fornecedor e na lista editar depois fazer o login não vai funcionar, porque tem um guarda de
+                        rota no arquivo fornecedor.guards.ts e produto.guard.ts alterar a linha 
+                        de:
+                            this.router.navigate(['/conta/login']);
+
+                        para: 
+
+                            this.router.navigate(['/conta/login'],{ queryParams: { returnUrl: this.router.url }});
+
+                89 - Refatorando serviços de guarda
+
+                    Objetivo: Retirar o codigo duplicado e codigo morto que não está sendo utilizado para no futuro
+                    melhorar a manutenção do sistema
+
+                    89.1 - Até esse momento a duplicação está no codigo dos arquivos produto.guard.ts e produto.guard.ts
+
+                    89.2 - Vamos criar um arquivo na pasta generica de service chamado base.guard.ts
+
+                    89.3 - Copiado todo conteudo do arquivo produto.guard.ts para arquivo base.guard.ts
+
+                    89.4 - export abstract class BaseGuard abstract não pode ser estanciada com new apenas herdade na assinatura
+                        da classe com extend
+
+                    89.5 - No constructor tem uma rota injetado do tipo protected por que é uma classe abstract
+
+                            constructor(protected router: Router)
+
+                    89.6 - Metodo Validar Claims onde vai retorna um tipo boolean
+
+                            protected validarClaims(routeAc: ActivatedRouteSnapshot): boolean {
+                                
+                            Dentro desse metodo tem todo o codigo copiado que estavam sendo repetido dos arquivos produtos.guard e fornecedor.guard
+
+                             protected validarClaims(routeAc: ActivatedRouteSnapshot): boolean {
+                                  if(!this.localStorageUtils.obterTokenUsuario()){
+                                      this.router.navigate(['/conta/login/'], { queryParams: { returnUrl: this.router.url }});
+                                  }  
+                                  let user = this.localStorageUtils.obterUsuario();
+                                  let claim: any = routeAc.data[0];
+                                  if (claim !== undefined) {
+                                      let claim = routeAc.data[0]['claim'];
+                                      
+                                      if (claim) {
+                                          if (!user.claims) {
+                                              this.navegarAcessoNegado();
+                                          }
+                                          
+                                          let userClaims = user.claims.find(x => x.type === claim.nome);
+                                          
+                                          if(!userClaims){
+                                              this.navegarAcessoNegado();
+                                          }
+                                          
+                                          let valoresClaim = userClaims.value as string;
+                                          if (!valoresClaim.includes(claim.valor)) {
+                                              this.navegarAcessoNegado();
+                                          }
+                                      }
+                                  }
+                                  return true;  
+                              }
+
+                             navegarAcessoNegado() {
+                                 this.router.navigate(['/acesso-negado']);
+                             }
+
+                    89.7 - Incluir o comando que herda a classe BaseGuard em produto.guard
+
+                        export class ProdutoGuard extends BaseGuard implements CanActivate, CanDeactivate<NovoComponent> {
+    
+                        lembrando que extend é para classe e implements é para interface
+
+                    89.8 - Como implementei o BaseGuard que é uma classe eu preciso passar no parametro do constructor o super
+
+                            que recebe uma rota constructor(private router: Router){ super(router)}
+
+                    89.9 - Outro detalhe constructor(private router está privado nessa tipo de assinatura o javascript não deixa
+                            aparecer nas outras classe então devemos mudar para protected
+
+                            constructor(protected router
+                    
+                    89.10 - apagado todo esse codigo fonte 
+
+                                 if(!this.localStorageUtils.obterTokenUsuario()){
+                                     this.router.navigate(['/conta/login/'], { queryParams: { returnUrl: this.router.url }});
+                                 }  
+                                 let user = this.localStorageUtils.obterUsuario();
+                                 let claim: any = routeAc.data[0];
+                                 if (claim !== undefined) {
+                                     let claim = routeAc.data[0]['claim'];
+
+                                     if (claim) {
+                                         if (!user.claims) {
+                                             this.navegarAcessoNegado();
+                                         }
+
+                                         let userClaims = user.claims.find(x => x.type === claim.nome);
+
+                                         if(!userClaims){
+                                             this.navegarAcessoNegado();
+                                         }
+
+                                         let valoresClaim = userClaims.value as string;
+                                         if (!valoresClaim.includes(claim.valor)) {
+                                             this.navegarAcessoNegado();
+                                         }
+                                     }
+                                 }
+
+                                 
+                                    return true;  
+                                }
+
+                                navegarAcessoNegado() {
+                                    this.router.navigate(['/acesso-negado']);
+                                }
+
+                    89.11 - Usando o super chamar o metodo validarClaims passando o routeAc como retorno 
+                            do metodo canActivate que já existia no arquivo produto.guard.ToastService
+
+                             canActivate(routeAc: ActivatedRouteSnapshot) {
+                                  return super.validarClaims(routeAc);
+                             
+                              }
+
+                    89.12 - Apagar a chamada ao instanciamento do   localStorageUtils = new LocalStorageUtils();
+
+                            que ficou centralizada na classe BaseGuard.
+
+                    89.13 - Por ultimo apagar todo codigo morto 
+
+                    89.14 - Sistema treino finalizado com tudo funcionando corretamente igual a aula
+
+                90 - Refatorando componentes 
+
+                    Objetivo: Tirar Todos codigo repetido e centralizar em um unico lugar facilitando a reutilização
+
+                    90.1 - Criar na pasta base de produto os arquivo produto-form.base.component.ts essa é base de qualquer
+                    componente dentro da pasta produto  
+
+                    90.2 - Criar a classe abstrata
+                        export abstract class ProdutosBaseComponent{
+    
+                        }
+
+                    90.3 - Trazer tudo o que é comum
+
+                            produto: Produto;
+                            fornecedores: Fornecedor[];
+                            errors: any[] = [];
+                            produtoForm: FormGroup;
+                            MASKS = utilsBr.MASKS;
+                    
+                    90.4 - Colocar as ValidationMessage dentro do construtor
+
+                            constructor(){
+                                     this.validationMessages = {
+                                        fornecedorId: {
+                                          required: 'Escolha um fornecedor',
+                                        },
+                                        nome: {
+                                          required: 'Informe o Nome',
+                                          minlength: 'Mínimo de 2 caracteres',
+                                          maxlength: 'Máximo de 200 caracteres
+                                        },
+                                        descricao: {
+                                          required: 'Informe a Descrição',
+                                          minlength: 'Mínimo de 2 caracteres'
+                                          maxlength: 'Máximo de 1000 caracteres
+                                        },
+                                        imagem: {
+                                          required: 'Informe a Imagem',
+                                        },
+                                        valor: {
+                                          required: 'Informe o Valor',
+                                        }
+                                      };     
+                                }
+
+                        90.5 - Incluir as classe que utilizamos em todos formularios
+
+                                validationMessages: ValidationMessages
+                                genericValidator: GenericValidator;
+                                displayMessage: DisplayMessage = {}; 
+
+                        90.6 - Ativar o genericValidator com a linha, que o genericValidator esta olhando para essa coleção
+
+                                this.genericValidator = new GenericValidator(this.validationMessages);
+                        
+                        90.7 - Incluir essa classe abstrata  no arquivo que inseri NovoComponent usando extends que faz a herança da classe
+
+                                export class NovoComponent extends ProdutosBaseComponent implements OnInit {
+
+                        90.8 - No arquivo NovoComponent limpar o que eu não preciso e que já existe na classe herdada
+
+                                produto: Produto;
+                                fornecedores: Fornecedor[];
+                                errors: any[] = [];
+                                produtoForm: FormGroup;
+                                validationMessages: ValidationMessages;
+                                genericValidator: GenericValidator;
+                                displayMessage: DisplayMessage = {};
+                                MASKS = utilsBr.MASKS;
+                                formResult: string = ''; --não vou mais usar
+                                mudancasNaoSalvas: boolean;
+                        
+                        90.9 - Dentro do constructor passa o super();
+
+                        90.10 - Apagado tudo do ValidationMessagens
+
+                                this.validationMessages = {
+                                  fornecedorId: {
+                                    required: 'Escolha um fornecedor',
+                                  },
+                                  nome: {
+                                    required: 'Informe o Nome',
+                                    minlength: 'Mínimo de 2 caracteres',
+                                    maxlength: 'Máximo de 200 caracteres'
+                                  },
+                                  descricao: {
+                                    required: 'Informe a Descrição',
+                                    minlength: 'Mínimo de 2 caracteres',
+                                    maxlength: 'Máximo de 1000 caracteres'
+                                  },
+                                  imagem: {
+                                    required: 'Informe a Imagem',
+                                  },
+                                  valor: {
+                                    required: 'Informe o Valor',
+                                  }
+                                };
+                                this.genericValidator = new GenericValidator(this.validationMessages);
+
+                        90.11 - Limpar as redundancias dos imports.
+
+                                import { utilsBr } from 'js-brasil';
+                                import { ValidationMessages, GenericValidator, DisplayMessage } from 'src/app/utils/generic-form-validation';
+                                import { Produto, Fornecedor } from '../models/produto';
+                                FormGroup
+                        
+                        90.12 - Criar dentro da classe abstrata produto-form.base.component o metodo
+
+                                    protected configurarValidacaoFormulario(){}
+
+                        90.13 - Adicionar o conteudo do metodo ngAfterViewInit do component NovoComponent dentro do metodo configurarValidacaoFormulario
+
+                                 let controlBlurs: Observable<any>[] = this.formInputElements
+                                   .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+                                 merge(...controlBlurs).subscribe(() => {
+                                   this.displayMessage = this.genericValidator.processarMensagens(this.produtoForm);
+                                   this.mudancasNaoSalvas = true;
+                                 });
+
+                        90.14 - Incluir as referencias do RXJS se não tiver 
+
+                        90.15 - Incluir o formInputElements:ElementRef[] como parametro de entrada e retirar o this.
+
+                                protected configurarValidacaoFormulario( formInputElements:ElementRef[] ){
+                                let controlBlurs: Observable<any>[] = formInputElements
+                        
+                        90.16 - Fazer a mesma implementação no componente editarProduto
+
+                        90.17 - Em fornecedor pode fazer a mesma coisa mas como é mais complexo não vale a pensar
+
+                        90.18 - Vamos deixar ainda  mais generica na pasta basica app vaomo criar uma pasta chamada basic-componentes
+
+                        90.19 - Vamos criar a classe basica para componentes
+                                Criar a pasta basic-Components e dentro criar o arquivo form-base.component.ts para criar O
+                                codigo com a especialidade com base em form, ou seja vamos centralizar nesse arquivo todo O
+                                itens repetidos que fazem alguma nos formularios
+
+                        90.20 - Vamos criar a classe FormBaseComponent que vai trabalhar apenas com base de validação de formulario.
+
+                                export abstract class FormBaseComponent{
+
+                                   validationMessages: ValidationMessages
+                                   genericValidator: GenericValidator;
+                                   displayMessage: DisplayMessage = {};
+
+                                   mudancasNaoSalvas: boolean;
+
+                                   protected configurarMensagensValidacaoBase( validationMessages: ValidationMessages  ){
+                                       this.genericValidator = new GenericValidator(validationMessages);
+                                   }
+
+                                   protected configurarValidacaoFormularioBase( formInputElements:ElementRef[], formGroup:FormGroup ){
+                                       let controlBlurs: Observable<any>[] = formInputElements
+                                          .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+
+                                       merge(...controlBlurs).subscribe(() => {
+                                        this.validarFormulario(formGroup)         
+                                       });
+                                   }
+
+                                   protected validarFormulario( formGroup: FormGroup){
+                                       this.displayMessage = this.genericValidator.processarMensagens(formGroup);
+                                       this.mudancasNaoSalvas = true;
+                                   }
+
+                                }                               
+
+                                Já foi instaldo uma responsabilidade independente da especialidade.
+
+                        90.20 - Vai alterar o codigo do arquivo  ProdutosBaseComponent herdando a classe abstrata FormBaseComponent 
+                                e reutilizando o codigo possibilitando a diminuição as linhas digitadas.
+                                A parte comentada foi criado primeiro e depois de herdar ou extender FormBaseComponent
+                                foi colocado o super mais os metodos.
+                                Retido todos os imports que não estão sendo usados.                                
+
+                                export abstract class ProdutosBaseComponent extends FormBaseComponent{
+
+                                produto: Produto;
+                                fornecedores: Fornecedor[];
+                                errors: any[] = [];
+                                produtoForm: FormGroup;
+
+                                MASKS = utilsBr.MASKS;
+
+                                validationMessages: ValidationMessages
+                                genericValidator: GenericValidator;
+                                displayMessage: DisplayMessage = {};
+                                mudancasNaoSalvas: boolean;
+
+                                constructor(){
+                                
+                                     super();
+                                     this.validationMessages = {
+                                      };     
+
+                                      super.configurarMensagensValidacaoBase(this.validationMessages);
+                                      //this.genericValidator = new GenericValidator(this.validationMessages);
+                                }
+
+                                protected configurarValidacaoFormulario( formInputElements:ElementRef[] ){
+                                
+                                  super.configurarValidacaoFormularioBase(formInputElements,this.produtoForm);
+                                    //  let controlBlurs: Observable<any>[] = formInputElements
+                                        // .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+
+                                    //  merge(...controlBlurs).subscribe(() => {
+                                      //  this.displayMessage = this.genericValidator.processarMensagens(this.produtoForm);
+                                      //  this.mudancasNaoSalvas = true;
+                                    //  });
+
+                                 }
+
+                         90.21 -  Na classe LoginComponent foi adicionado extend para herdas os metodos do formulario base
+                                  e abstrair todo o codigo que já existe.
+
+                                  export class LoginComponent extends FormBaseComponent implements
+
+                                  Lembrando de usar o Super porque a herança exigi esse comando no angular, o super é o this
+                                  do arquivo FormBaseComponent que referencia os metodos centralizados nessa classe.
+
+                        90.22 - Fazer a mesma implementação o arquivo CadastroComponent usando extends FormBaseComponent
+                                incluido o super e retirando os metods repetidos deixando eles centralizados no FormBaseComponent.
+
+                        
+                        90.23 - Fazer a mesma implementação o arquivo NovoComponent usando extends FormBaseComponent
+                            incluido o super e retirando os metods repetidos deixando eles centralizados no FormBaseComponent.
+                            export class NovoComponent extends FormBaseComponent
+
+                        90.24 - Fazer a mesma implementação o arquivo EditarComponent usando extends FormBaseComponent
+                            incluido o super e retirando os metods repetidos deixando eles centralizados no FormBaseComponent.
+                            export class EditarComponent extends FormBaseComponent

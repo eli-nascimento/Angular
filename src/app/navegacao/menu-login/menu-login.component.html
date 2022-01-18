@@ -1,0 +1,24 @@
+<!--A tag ul é uma lista não ordrnada que pode ficar na horizontal e vertical-->
+<!--ngSwitch é um switch case igual c#-->
+<!--ngSwitch vai executar o metodo usuarioLogado, caso false ele vai criar o botão entrar apontando para login -->
+<!--ngSwitch vai executar o metodo usuarioLogado, caso false vai também criar o botão Crie sua conta< apontando para login -->
+<ul [ngSwitch]="usuarioLogado()" class="navbar-nav">
+    <li *ngSwitchCase="false" class="nav-item" style="padding-right: 30px;">
+        <a class="btn btn-primary" [routerLink]="['/conta/login']">Entrar</a>
+    </li>
+    <li *ngSwitchCase="false" class="nav-item">
+        <a class="btn btn-success" [routerLink]="['/conta/cadastro']">Crie sua conta</a>
+    </li>
+
+<!--Caso true vai criar um link mostrando o e-mail'pode ser o nome' e o href="javascript:void(0)" deixa clicar sem acontecer nada  -->
+<!--Se no futuro quiser implementar uma rea de gestão do usuario para trocar a senha etc, incluir o link aqui-->
+    <li *ngSwitchCase="true" class="nav-item">
+        <a class="nav-link text-dark" id="saudacaoUsuario" href="javascript:void(0)">{{ email }}</a>
+    </li>
+<!--Aqui o evento de click chama o metodo logout e mostra um icone com o botão sair-->
+<!--Se quiser ter um link no angular que  não direcina pra nada colocar  href="javascript:void(0)" mas executa o metodo logout() com evento click  -->
+    <li *ngSwitchCase="true" class="nav-item">
+        <a class="nav-link text-dark" href="javascript:void(0)" (click)="logout()">
+            Sair <span class="fas fa-sign-out-alt"></span></a>
+    </li>
+</ul>

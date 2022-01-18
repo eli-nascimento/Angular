@@ -1,0 +1,50 @@
+<div class="container main-container">
+    <h1>Login</h1>
+    <!-- form tentar o metodo adicionarConta chamado no ngSubmit  -->
+    <!-- formGroup é o cadastroForm que declaramos  -->
+    <form novalidate (ngSubmit)="login()" [formGroup]="loginForm">
+
+        <h4>Entre sua conta</h4>
+        <hr>
+
+        <!-- faz um loop com o *ngIf="errors.length para mostrar cada erro  -->
+        <!-- Essa divi só vai ser exibida caso o numero de erro seja maior que 0 errors.length > 0 -->
+        <div class="alert alert-danger" *ngIf="errors.length > 0">
+            <h3 id="msgRetorno">Opa! Alguma coisa não deu certo:</h3>
+            <ul>
+                <li *ngFor="let error of errors">{{ error }}</li>
+            </ul>
+        </div>
+
+        <!-- Essa div de email que tem a classe [ngClass]="{'is-invalid': displayMessage.email } que vai exibida quando existir alguma messagem de erro dentro do objeto displayMessage  -->
+        <!--displayMessage vai ser alimentado no  AfterViewInit do arquivocadastro,component.ts que o evento blur for disparado -->
+        <div class="form-group">
+            <label class="col-md-2 control-label">E-mail</label>
+            <div class="col-md-10">
+                <input class="form-control" id="email" type="text" placeholder="E-mail (requerido)" formControlName="email" [ngClass]="{'is-invalid': displayMessage.email }" />
+                <span class="text-danger" *ngIf="displayMessage.email">
+                                <p [innerHTML]="displayMessage.email"></p>
+                            </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Senha</label>
+            <div class="col-md-10">
+                <input class="form-control" id="password" type="password" placeholder="Senha (requerido)" formControlName="password" [ngClass]="{'is-invalid': displayMessage.password }" />
+                <span class="text-danger" *ngIf="displayMessage.password">
+                                <p [innerHTML]="displayMessage.password"></p>
+                            </span>
+            </div>
+        </div>
+      
+       
+        <!--Botao resgistra desabita o botão com [disable] se o formulario for invalido -->
+        <div class="form-group">
+            <div class="col-md-4 col-md-offset-2">
+                <span><button class="btn btn-success" id="Login" [disabled]="!loginForm.valid" type="submit">Login</button></span>
+            </div>
+        </div>
+    </form>
+</div>
+
